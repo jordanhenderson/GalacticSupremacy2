@@ -2,7 +2,7 @@
 using System.Collections;
 using gsFramework;
 
-public class generatePlanets : MonoBehaviour {
+public class handlePlanets : MonoBehaviour {
 	private float dimensions = 20.0f;
 	// "Server" startup; Initialisation
 	void Start () {
@@ -53,10 +53,6 @@ public class generatePlanets : MonoBehaviour {
 		GameObject cube4 = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		cube4.transform.localPosition = new Vector3(dimensions, 0, -dimensions);
 	}
-	
-
-
-
 
 	private Vector3 find_new_pos(int index) {
 	 	float colDist = 2.0f;

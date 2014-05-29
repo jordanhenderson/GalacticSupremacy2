@@ -69,6 +69,7 @@ public class MainGUI : MonoBehaviour {
 				if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), selectedSR.buildings[i].name)) {
 					//showConMenu = true;
 					//buttonClicked = i;
+
 				}
 			}
 		}
