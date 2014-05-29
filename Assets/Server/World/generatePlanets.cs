@@ -3,75 +3,19 @@ using System.Collections;
 using gsFramework;
 
 public class generatePlanets : MonoBehaviour {
-
-	/********** Struct Definitions **********/
-	
-
 	private float dimensions = 20.0f;
-	public static int numRegions = 10;	// The number of SolReg in the sector.
-	
-	// should this be static? 
-	public static SolReg[] regions = new SolReg[numRegions];
-
-
-
-	/*
-	Region Coordinates: 
-	15.6, 2.9
-	1.9, -8.5
-	-8.2, -4.9
-	9.5, -6.7
-	-0.3, -1.24
-	-4, -14.3
-	start 16, 16.5
-	9.6, 14.36
-	6.6, 3.92
-	start -14.56, -14.7
-	*/
-	private float[] xPos = new float[10] {15.6f, 1.9f, -8.2f, 9.5f, -0.3f, -4.0f, 16.0f, 9.6f, 6.6f, -14.56f};
-	private float[] zPos = new float[10] {2.9f, -8.5f, -4.9f, -6.7f, -1.24f, -14.3f, 16.5f, 14.36f, 3.92f, -14.7f};
-
-	//private Vector3 pos;
-
 	// "Server" startup; Initialisation
 	void Start () {
 		// draw map borders
 		draw_borders();
-
-		// Generate attributes of the regions
-		for (int i = 0; i < numRegions; ++i) {
-			regions[i].id = i+1;
-
-			regions[i].x = xPos[i];
-			regions[i].z = zPos[i];
-			regions[i].owner = 0;
-
-			regions[i].scale = Random.Range(0.1f, 1.0f);
-			regions[i].texture = "texture" + Random.Range(1, 4);
-
-			regions[i].income = Random.Range(20, 50);
-			regions[i].slots = Random.Range(3, 6);
-			regions[i].emptySlots = regions[i].slots;
-			regions[i].buildings = new Building[regions[i].slots];
-		}
-		InitOwnership();
 		connect_regions();
 	}
 	
-
 	private void connect_regions() {
 		for (int i = 0; i < numRegions; ++i) {
 			
 		}
 	}
-
-	private void InitOwnership() {
-		regions[6].owner = 2;
-		regions[9].owner = 1;
-	}
-
-	
-	
 
 	/* 
 	 * calc_distance takes 2 vectors as inputs and calculates the
@@ -88,20 +32,12 @@ public class generatePlanets : MonoBehaviour {
 		return distance;
 	}
 
-
-	public static int get_region_num () {
-		int num = numRegions;
-		return num;
-	}
 	
 	/*
 	 * getRegions allows a client to retrieve a sectors regions and their attributes.
 	 */
-	public static SolReg get_sol_reg (int index) {
-		SolReg reg = regions[index];
-		//print("index: " + index);
-		//print("id: " + regions[index].id);
-		return reg;
+	public ref SolReg get_sol_reg (int index) {
+		return Server.Instance.regions[index];
 	}
 
 	/*
