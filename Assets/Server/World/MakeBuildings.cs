@@ -52,4 +52,8 @@ public class MakeBuildings : MonoBehaviour {
 
 		buildings[2] = Shipyard;
 	}
+
+	void Build() {
+
+	}
 }

@@ -10,8 +10,6 @@ using gsFramework;
 public class startup : MonoBehaviour {
 
 	public generatePlanets regionServ;
-	//public SolReg[] regions;
-	private int numRegions;
 	public SolReg selectedSR;
 	GameObject selector;
 	GameObject selected;
@@ -21,14 +19,9 @@ public class startup : MonoBehaviour {
 	 * render the map. This includes the number regions, and data
 	 */
 	void Start () {
-		// This would be a server request:
-		numRegions = generatePlanets.numRegions;
-		//regions = new SolReg[numRegions];
-
-		for (int i = 0; i < numRegions; ++i) {
+		for (int i = 0; i < Server.Instance.regions.Count; ++i) {
 			// This would be a server request:
-			//regions[i] = generatePlanets.get_sol_reg(i);
-			DrawRegion(generatePlanets.regions[i]);
+			DrawRegion(Server.Instance.regions[i]);
 		}
 	}
 

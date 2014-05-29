@@ -1,14 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using gsFramework;
+using SimpleJSON;
 
-public class Server : Singleon<Server> {
+public class Server : Singleton<Server> {
 	protected Server() {}
-	
-	public int numRegions = 10;	// The number of SolReg in the sector.
 	public List<SolReg> regions = new List<SolReg>();
-	
-	public List<SolReg> regions;
 	private enum Actions
 		{
 		ACTION_SEND_CHAT,
@@ -41,6 +39,8 @@ public class Server : Singleon<Server> {
 			r.slots = node[8].AsInt;
 		}
 	}
+
+
 	
 	private string server_url = "http://deco3800-14.uqcloud.net/game.php";
 	private Hashtable header = new Hashtable ();
@@ -48,14 +48,28 @@ public class Server : Singleon<Server> {
 		header.Add ("Content-Type", "text/json");
 	}
 
+	private byte[] bytesFromString(string s) {
+		byte[] data = new byte[s.Length * sizeof(char)];
+		System.Buffer.BlockCopy (s.ToCharArray (), 0, data, 0, data.Length);
+		return data;
+	}
+
 	private IEnumerator UpdateGame() {
 		string request = "{action:" + Actions.ACTION_UPDATE_GAMESTATE + "}";
-		byte[] data = new byte[request.Length * sizeof(char)];
-		System.Buffer.BlockCopy (request.ToCharArray (), 0, data, 0, data.Length);
+		byte[] data = bytesFromString (request);
 		header["Content-Length"] = data.Length;
 		WWW www = new WWW (server_url, data, header);
 		yield return www;
 		ParseGameState (www.bytes);
+	}
+
+	public IEnumerator SendRequest(string id) {
+		string request = "{action:" + Actions.ACTION_PLAYER_EVENT + "}";
+		byte[] data = bytesFromString (request);
+		header["Content-Length"] = data.Length;
+		WWW www = new WWW (server_url, data, header);
+		yield return www;
+	
 	}
 	
 	private int tick = 0; 

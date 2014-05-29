@@ -31,5 +31,13 @@ namespace gsFramework
 		public int income;			// Income this building adds
 		public float constructionTime;	// Time it takes to construct this building
 		public string imageURL;			// Icon associated with this building
+		public Building(int i, string n, int c, int inc, float ct, string u) {
+			this.id = i;
+			this.name = n;
+			this.cost = c;
+			this.income = inc;
+			this.constructionTime = ct;
+			this.imageURL = u;
+		}
 	}
 }
