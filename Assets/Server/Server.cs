@@ -29,16 +29,7 @@ public class Server : Singleon<Server> {
 		 * predictions.
 		 */
 		foreach (JSONNode node in s[1].AsArray) {
-			SolReg r = new SolReg();
-			r.sector = node[0].AsInt;
-			r.id = node[1].AsInt;
-			r.x = node[2].AsFloat;
-			r.z = node[3].AsFloat;
-			r.scale = node[4].AsFloat;
-			r.texture = "texture" + node[5].AsInt.ToString ();
-			r.owner = node[6].AsInt;
-			r.income = node[7].AsInt;
-			r.slots = node[8].AsInt;
+			SolReg r = new SolReg(node);
 		}
 	}
 	

@@ -20,6 +20,18 @@ namespace gsFramework
 		public int slots;				// Construction slots on this SolReg
 		public int emptySlots;			// Empty construction slots on this SolReg
 		public Building[] buildings;	// List of buildings on this planet
+		public SolReg(JSONNode node) {
+			sector = node[0].AsInt;
+			id = node[1].AsInt;
+			x = node[2].AsFloat;
+			z = node[3].AsFloat;
+			scale = node[4].AsFloat;
+			texture = "texture" + node[5].AsInt.ToString ();
+			owner = node[6].AsInt;
+			income = node[7].AsInt;
+			slots = node[8].AsInt;
+			emptySlots = node[9].AsInt;
+		}
 	}
 
 	/* Buildings are the options a player has to develop their SolarRegions.

@@ -8,8 +8,9 @@ $ACTION_GET_GAMESTATE = 2;
 $ACTION_PLAYER_EVENT = 3;
 
 
-$action = (int)$_POST['action'];
-$request = json_decode(file_get_contents('php://input'), true);
+$r = json_decode(file_get_contents('php://input'), true);
+$action = $r['action'];
+$request = $r['data'];
 
 switch($action) {
 	case $ACTION_SEND_CHAT:
