@@ -1,21 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using gsFramework;
-
-public class Server : Singleon<Server> {
+using SimpleJSON;
+public enum ServerAction {
+	ACTION_SEND_CHAT,
+	ACTION_GET_CHAT,
+	ACTION_GET_GAMESTATE,
+	ACTION_CONSTRUCT_BUILDING
+};
+public class Server : Singleton<Server> {
 	protected Server() {}
-	
-	public int numRegions = 10;	// The number of SolReg in the sector.
+	public bool loaded = false;
 	public List<SolReg> regions = new List<SolReg>();
-	
-	public List<SolReg> regions;
-	private enum Actions
-		{
-		ACTION_SEND_CHAT,
-		ACTION_GET_CHAT,
-		ACTION_UPDATE_GAMESTATE,
-		ACTION_PLAYER_EVENT
-		}
 	private void ParseGameState(byte[] data) {
 		char[] chars = new char[data.Length / sizeof(char)];
 		System.Buffer.BlockCopy (data, 0, chars, 0, data.Length);
@@ -31,22 +28,38 @@ public class Server : Singleon<Server> {
 		foreach (JSONNode node in s[1].AsArray) {
 			SolReg r = new SolReg(node);
 		}
+		loaded = true;
 	}
-	
+
 	private string server_url = "http://deco3800-14.uqcloud.net/game.php";
 	private Hashtable header = new Hashtable ();
 	void Startup() {
 		header.Add ("Content-Type", "text/json");
 	}
 
+	private byte[] bytesFromString(string s) {
+		byte[] data = new byte[s.Length * sizeof(char)];
+		System.Buffer.BlockCopy (s.ToCharArray (), 0, data, 0, data.Length);
+		return data;
+	}
+
 	private IEnumerator UpdateGame() {
-		string request = "{action:" + Actions.ACTION_UPDATE_GAMESTATE + "}";
-		byte[] data = new byte[request.Length * sizeof(char)];
-		System.Buffer.BlockCopy (request.ToCharArray (), 0, data, 0, data.Length);
+		string request = "{action:" + ServerAction.ACTION_GET_GAMESTATE + "}";
+		byte[] data = bytesFromString (request);
 		header["Content-Length"] = data.Length;
 		WWW www = new WWW (server_url, data, header);
 		yield return www;
 		ParseGameState (www.bytes);
+
+	}
+
+	public IEnumerator SendRequest(ServerAction action) {
+		string request = "{action:" + action + ",}";
+		byte[] data = bytesFromString (request);
+		header["Content-Length"] = data.Length;
+		WWW www = new WWW (server_url, data, header);
+		yield return www;
+	
 	}
 	
 	private int tick = 0; 

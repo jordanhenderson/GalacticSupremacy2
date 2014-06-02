@@ -7,12 +7,8 @@ public class MainGUI : MonoBehaviour {
 	//public GUISkin mySkin;
 	public SolReg selectedSR;
 	public GameObject Player;
-	public GameObject Server;
 	public bool showConMenu = false;
 	private int buttonClicked;
-	//public MakeBuildings buildingServ;
-	public Building[] buildings;
-	public int numBuildings;
 
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
@@ -21,16 +17,6 @@ public class MainGUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
-		Server = GameObject.Find("Server");
-
-		numBuildings = MakeBuildings.numBuildings;
-		//buildings = new Building[numBuildings];
-
-		//for (int i = 0; i < numBuildings; ++i) {
-			// This would be a server request:
-			//buildings[i] = MakeBuildings.buildings[i];
-			//DrawRegion(regions[i]);
-		//}
 	}
 	
 	// Update is called once per frame
@@ -83,6 +69,7 @@ public class MainGUI : MonoBehaviour {
 				if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), selectedSR.buildings[i].name)) {
 					//showConMenu = true;
 					//buttonClicked = i;
+
 				}
 			}
 		}
@@ -90,43 +77,15 @@ public class MainGUI : MonoBehaviour {
 
 	void DrawConPanel(int id) {
 
-		for (int i = 0; i < numBuildings; ++i) {
-			if (GUI.Button(new Rect(20, 20+(i*25), 100, 20), "Build" +MakeBuildings.buildings[i].name)) {
-				Build(i);
+		for (int i = 0; i < Buildings.nBuildings; ++i) {
+			if (GUI.Button(new Rect(20, 20+(i*25), 100, 20), "Build" +Buildings.buildings[i].name)) {
+
 			}	
 		}
 
 		if (GUI.Button(new Rect(150, 200, 60, 20), "Close")) {
 				showConMenu = false;
 			}
-	}
-
-
-	void Build (int id) {
-
-		// check if enough resources are available
-		int available = Player.GetComponent<PlayerState>().credits;
-		int cost = MakeBuildings.buildings[id].cost;
-		print("MainGUI: "+MakeBuildings.buildings[id].name+" Cost: $"+cost);
-
-
-		if (available >= cost) {	// sufficient funds are available
-			// Inform server of the incurred cost
-			Player.GetComponent<PlayerState>().credits -= cost;
-			
-			// Add building to the region
-			int idSR = selectedSR.id;
-			selectedSR.buildings[buttonClicked] = MakeBuildings.buildings[id];
-
-			// update SR @ serverside, should be some request
-			generatePlanets.regions[idSR-1].buildings[buttonClicked]=MakeBuildings.buildings[id];
-
-			// Finally, hide menu again
-			showConMenu = false;	
-		} else {
-			// not enough funds, inform player
-			// TODO
-		}
 	}
 		
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using gsFramework;
 
-public class generatePlanets : MonoBehaviour {
+public class handlePlanets : MonoBehaviour {
 	private float dimensions = 20.0f;
 	// "Server" startup; Initialisation
 	void Start () {
@@ -12,7 +12,7 @@ public class generatePlanets : MonoBehaviour {
 	}
 	
 	private void connect_regions() {
-		for (int i = 0; i < numRegions; ++i) {
+		for (int i = 0; i < Server.Instance.regions.Count; ++i) {
 			
 		}
 	}
@@ -36,7 +36,7 @@ public class generatePlanets : MonoBehaviour {
 	/*
 	 * getRegions allows a client to retrieve a sectors regions and their attributes.
 	 */
-	public ref SolReg get_sol_reg (int index) {
+	public SolReg get_sol_reg (int index) {
 		return Server.Instance.regions[index];
 	}
 
@@ -53,10 +53,6 @@ public class generatePlanets : MonoBehaviour {
 		GameObject cube4 = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		cube4.transform.localPosition = new Vector3(dimensions, 0, -dimensions);
 	}
-	
-
-
-
 
 	private Vector3 find_new_pos(int index) {
 	 	float colDist = 2.0f;
@@ -74,7 +70,7 @@ public class generatePlanets : MonoBehaviour {
 	 		randX = Random.Range(-dimensions, dimensions);
 
 	 		for (int i = 0; i < index; ++i) {
-	 			xDist = Mathf.Abs(randX-regions[i].x);
+	 			xDist = Mathf.Abs(randX-Server.Instance.regions[i].x);
 	 		}
 	 	//}
 

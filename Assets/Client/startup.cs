@@ -8,27 +8,28 @@ using gsFramework;
  * holds information about the players GUI interaction (selection).
  */ 
 public class startup : MonoBehaviour {
-
-	public generatePlanets regionServ;
-	//public SolReg[] regions;
-	private int numRegions;
 	public SolReg selectedSR;
 	GameObject selector;
 	GameObject selected;
 	GameObject guiController;
 
+	private bool drawn = false; //Have planets been drawn yet?
+
 	/* Initialization. Queries the server for the data needed to build and
 	 * render the map. This includes the number regions, and data
 	 */
 	void Start () {
-		// This would be a server request:
-		numRegions = generatePlanets.numRegions;
-		//regions = new SolReg[numRegions];
+	}
 
-		for (int i = 0; i < numRegions; ++i) {
-			// This would be a server request:
-			//regions[i] = generatePlanets.get_sol_reg(i);
-			DrawRegion(generatePlanets.regions[i]);
+	void Update() {
+		//If the server has provided region info (loaded data)...
+		if (!drawn && Server.Instance.loaded) {
+			for (int i = 0; i < Server.Instance.regions.Count; ++i) {
+				// This would be a server request:
+				DrawRegion(Server.Instance.regions[i]);
+			}
+			drawn = true;
+			Server.Instance.loaded = false;
 		}
 	}
 

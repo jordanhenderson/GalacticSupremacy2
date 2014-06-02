@@ -31,12 +31,14 @@ public class PlayerState : MonoBehaviour {
 	 */
 	public void computeIncome () {
 		// find all regions where SolReg.owner == player.id
+		//TODO MOVE TO SERVER
 		income = 0;
-		for (int i = 0; i < generatePlanets.numRegions; ++i) {
-			if (generatePlanets.regions[i].owner == id) {
-				income += generatePlanets.regions[i].income;
-				for (int j = 0; j < generatePlanets.regions[i].slots; ++j) {
-					income += generatePlanets.regions[i].buildings[j].income;	
+		for (int i = 0; i < Server.Instance.regions.Count; ++i) {
+			SolReg reg = Server.Instance.regions[i];
+			if (reg.owner == id) {
+				income += reg.income;
+				for (int j = 0; j < reg.slots; ++j) {
+					income += reg.buildings[j].income;	
 				}
 			}
 		}
