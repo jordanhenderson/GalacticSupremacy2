@@ -9,9 +9,8 @@ namespace gsFramework
 	 * them, an individual ID, their x and z coordinates in the 
 	 * sector-space, and a texture.
 	 */
-	public struct SolReg {
+	public struct SolReg : ServerObject {
 		public int sector;				// ID of sector that contains the SolReg
-		public int id;					// ID of this SolReg
 		public float x, z;				// coordinates of the SolReg in the sector-space.
 		public float scale;				// indicator of the planets size
 		public int texture;			// the planets texture for the map
@@ -21,9 +20,11 @@ namespace gsFramework
 		public int emptySlots;			// Empty construction slots on this SolReg
 		public List<int> adjacent;			// ID's of adjacent SolReg
 		public List<int> buildings;	// List of buildings on this planet. Keep track of IDs here.
-		public SolReg(JSONNode node) {
-			sector = node[0].AsInt;
-			id = node[1].AsInt;
+		public SolReg(JSONNode node) : ServerObject(node[0].AsInt, ObjectTypes.OBJECT_SOLREG) {
+			Update(node);
+		}
+		public override void Update(JSONNode node) {
+			sector = node[1].AsInt;
 			x = node[2].AsFloat;
 			z = node[3].AsFloat;
 			scale = node[4].AsFloat;
@@ -39,26 +40,35 @@ namespace gsFramework
 			foreach(JSONNode n in node[11].AsArray) {
 				buildings.Add(n.AsInt);
 			}
-			
+				
 		}
+		override JSONClass Serialize() {
+			JSONClass c = new JSONClass;
+			//Populate c.
+		}
+
 	}
 
 	/* Buildings are the options a player has to develop their SolarRegions.
 	 */
-	public struct Building {
-		public int id;					// Unique ID of the building type
+	public struct Building : ServerObject{
 		public string name;				// The name of this building.
 		public int cost;				// Construction Cost
 		public int income;			// Income this building adds
 		public float constructionTime;	// Time it takes to construct this building
 		public string imageURL;			// Icon associated with this building
-		public Building(int i, string n, int c, int inc, float ct, string u) {
-			this.id = i;
-			this.name = n;
-			this.cost = c;
-			this.income = inc;
-			this.constructionTime = ct;
-			this.imageURL = u;
+		public Building(JSONNode node) : ServerObject(node[0].AsInt, ObjectTypes.OBJECT_BUILDING) {
+			name = node[1].AsString;
+			cost = node[2].AsInt;
+			income = node[3].AsInt;
+			constructionTime = node[4].AsInt;
+			imageURL = node[5].AsString;
+		}
+		public override void Commit() {
+			
+		}
+		public override void Refresh() {
+			
 		}
 	}
 }
