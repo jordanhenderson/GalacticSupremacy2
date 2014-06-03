@@ -35,7 +35,7 @@ public abstract class ServerObject : MonoBehavior {
 	abstract void Update(JSONNode node);
 	
 	//This function is called when the object should be committed, populating a JSONClass object.
-	abstract void JSONClass Serialize();
+	abstract JSONClass Serialize();
 	
 	public void Commit() {
 		JSONClass c = Serialize();
