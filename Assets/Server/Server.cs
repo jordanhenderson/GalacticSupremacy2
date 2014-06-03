@@ -9,38 +9,50 @@ public enum ObjectTypes {
 	OBJECT_PLANET
 }
 
-public class ServerObject {
+public class ServerUtility {
+	public byte[] bytesFromString(string s) {
+		byte[] data = new byte[s.Length * sizeof(char)];
+		System.Buffer.BlockCopy (s.ToCharArray (), 0, data, 0, data.Length);
+		return data;
+	}
+	
+	public string stringFromBytes(byte[] data) {
+  		char[] chars = new char[data.Length / sizeof(char)];
+  		System.Buffer.BlockCopy (data, 0, chars, 0, data.Length);
+ 		string data_str = new string (chars);
+ 		return new string (chars);	
+ 	}
+}
+
+public abstract class ServerObject : MonoBehavior {
 	public int id; //ID of the server object
 	public int type; //Type of the server object (used to inform server of data/operation type).
 	public ServerObject(int id, int type) {
 		id = id;
 		type = type;
 	}
-	protected virtual void Commit(JSONClass c) {
-		Server.CommitObject(c);
+	//This function is called after the object has been reloaded.
+	abstract public void Update(JSONNode node);
+	
+	//This function is called when the object should be committed.
+	abstract public void Commit();
+	
+
+	private void _Refresh() {
+		WWW www = Server.RefreshObject(this);
+		yield return www;
+		Update(JSON.Parse(ServerUtility.stringFromBytes(www.bytes)));
 	}
-	/* This needs to be handled by base class. */
-	protected WWW Refresh() {
-		return Server.RefreshObject(this);
+	
+	public void Refresh() {
+		StartCoroutine(_Refresh());
 	}
 }
 
 public class Server : Singleton<Server> {
-	protected Server() {}
-	private byte[] bytesFromString(string s) {
-		byte[] data = new byte[s.Length * sizeof(char)];
-		System.Buffer.BlockCopy (s.ToCharArray (), 0, data, 0, data.Length);
-	public void UpdateObject(GameObject obj) {
-		string request = "{action:1, 
-	}		return data;
-	}
-	private string stringFromBytes(byte[] data) {
-		char[] chars = new char[data.Length / sizeof(char)];
-		System.Buffer.BlockCopy (data, 0, chars, 0, data.Length);
-		return new string (chars);	
-	}
-	
 	private string server_url = "http://deco3800-14.uqcloud.net/game.php";
+	protected Server() {}
+
 	private Hashtable header = new Hashtable ();
 	void Startup() {
 		header.Add ("Content-Type", "text/json");
