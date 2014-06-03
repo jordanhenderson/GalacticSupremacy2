@@ -32,11 +32,15 @@ public abstract class ServerObject : MonoBehavior {
 		type = type;
 	}
 	//This function is called after the object has been reloaded.
-	abstract public void Update(JSONNode node);
+	abstract void Update(JSONNode node);
 	
-	//This function is called when the object should be committed.
-	abstract public void Commit();
+	//This function is called when the object should be committed, populating a JSONClass object.
+	abstract void JSONClass Serialize();
 	
+	public void Commit() {
+		JSONClass c = Serialize();
+		Server.CommitObject(c);
+	}
 
 	private void _Refresh() {
 		WWW www = Server.RefreshObject(this);
