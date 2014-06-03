@@ -16,11 +16,12 @@ public class ServerObject {
 		id = id;
 		type = type;
 	}
-	public virtual void Commit(JSONClass c) {
+	protected virtual void Commit(JSONClass c) {
 		Server.CommitObject(c);
 	}
-	public virtual void Refresh() {
-		Server.RefreshObject(this);
+	/* This needs to be handled by base class. */
+	protected WWW Refresh() {
+		return Server.RefreshObject(this);
 	}
 }
 
