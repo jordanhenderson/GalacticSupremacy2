@@ -30,7 +30,7 @@ public class planetScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
-		SetOwner();
+
 	}
 	
 	/* Update is called once per frame:
@@ -38,11 +38,16 @@ public class planetScript : MonoBehaviour {
 	 * - scales solarRegions onMouseOver
 	 */
 	void Update() {
+		//Server: Get latest planet information
+		
+		
 		// Visual: Adds rotation to the solarRegion.
 		this.transform.Rotate(Vector3.forward * Time.deltaTime*10, Space.World);
 
 		// Visual: Increases scale on MouseOver:
 		ScaleChanging();
+		
+		
 	}
 
 	void SetOwner() {
