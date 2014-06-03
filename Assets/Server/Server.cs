@@ -3,6 +3,27 @@ using System.Collections.Generic;
 using System.Collections;
 using SimpleJSON;
 
+public enum ObjectTypes {
+	OBJECT_SOLREG,
+	OBJECT_BULIDING,
+	OBJECT_PLANET
+}
+
+public class ServerObject {
+	public int id; //ID of the server object
+	public int type; //Type of the server object (used to inform server of data/operation type).
+	public ServerObject(int id, int type) {
+		id = id;
+		type = type;
+	}
+	public virtual void Commit(JSONClass c) {
+		Server.CommitObject(c);
+	}
+	public virtual void Refresh() {
+		Server.RefreshObject(this);
+	}
+}
+
 public class Server : Singleton<Server> {
 	protected Server() {}
 	private byte[] bytesFromString(string s) {
