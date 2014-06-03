@@ -1,5 +1,6 @@
 /* Galactic Supremacy Framework. Here are shared struct defs and functions.
  */
+using System.Collections.Generic;
 namespace gsFramework
 {
 	/*
@@ -13,24 +14,32 @@ namespace gsFramework
 		public int id;					// ID of this SolReg
 		public float x, z;				// coordinates of the SolReg in the sector-space.
 		public float scale;				// indicator of the planets size
-		public string texture;			// the planets texture for the map
-		public int[] adjacent;			// ID's of adjacent SolReg
+		public int texture;			// the planets texture for the map
 		public int owner;				// owners playerID
 		public int income;				// Income provided by SolReg
 		public int slots;				// Construction slots on this SolReg
 		public int emptySlots;			// Empty construction slots on this SolReg
-		public Building[] buildings;	// List of buildings on this planet
+		public List<int> adjacent;			// ID's of adjacent SolReg
+		public List<int> buildings;	// List of buildings on this planet. Keep track of IDs here.
 		public SolReg(JSONNode node) {
 			sector = node[0].AsInt;
 			id = node[1].AsInt;
 			x = node[2].AsFloat;
 			z = node[3].AsFloat;
 			scale = node[4].AsFloat;
-			texture = "texture" + node[5].AsInt.ToString ();
+			texture = node[5].AsInt;
 			owner = node[6].AsInt;
 			income = node[7].AsInt;
 			slots = node[8].AsInt;
 			emptySlots = node[9].AsInt;
+			//Load arrays.
+			foreach(JSONNode n in node[10].AsArray) {
+				adjacent.Add(n.AsInt);
+			}
+			foreach(JSONNode n in node[11].AsArray) {
+				buildings.Add(n.AsInt);
+			}
+			
 		}
 	}
 
