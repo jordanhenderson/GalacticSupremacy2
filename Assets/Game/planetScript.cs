@@ -35,7 +35,7 @@ public class planetScript : MonoBehaviour {
 	}
 
 	void Start() {
-
+		ownIndic = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 	}
 	
 	/* Update is called once per frame:
@@ -45,16 +45,14 @@ public class planetScript : MonoBehaviour {
 	
 	void Update() {
 		// Visual: Adds rotation to the solarRegion.
-		this.transform.Rotate(Vector3.forward * Time.deltaTime*10, Space.World);
+		this.transform.Rotate(Vector3.forward * Time.deltaTime * 10, Space.World);
 
 		// Visual: Increases scale on MouseOver:
 		ScaleChanging();
-		
-		
 	}
 
 	void SetOwner() {
-		ownIndic = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+		
 		ownIndic.transform.localPosition = this.transform.localPosition;
 		//ownIndic.transform.localPosition.y -=1;
 		ownIndic.transform.localScale = new Vector3(1.8f, 0, 1.8f);

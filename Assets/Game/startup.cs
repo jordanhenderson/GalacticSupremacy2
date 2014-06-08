@@ -38,7 +38,7 @@ public class startup : MonoBehaviour {
 
 	public void SelectPlanet(planetScript ps) {
 		// If a previous selection exists, deselect. 
-		selectedPlanet.Deselect();
+		if(selectedPlanet != null) selectedPlanet.Deselect();
 		// Update current selection in this script.
 		selectedPlanet = ps;
 		Planet p = selectedPlanet.GetPlanet();
