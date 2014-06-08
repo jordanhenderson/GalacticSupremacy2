@@ -14,12 +14,18 @@ public class planetScript : MonoBehaviour {
 	public float smooth;
 	private Vector3 newScale;
 	private bool MouseOver;
-	//private bool isSelected;
 	private bool debug;
-	public SolReg thisSR;
+	private Planet planetData;
 	GameObject ownIndic;
-
-	// Use this for initialization
+	
+	public void SetPlanet(Planet p) {
+		planetData = p;
+	}
+	
+	public Planet GetPlanet() {
+		return planetData;
+	}
+	
 	void Awake() {
 		newScale = transform.localScale;
 		//isSelected = false;
@@ -28,7 +34,6 @@ public class planetScript : MonoBehaviour {
 		startup = GameObject.Find("startup");
 	}
 
-	// Use this for initialization
 	void Start() {
 
 	}
@@ -37,10 +42,8 @@ public class planetScript : MonoBehaviour {
 	 * - gives rotation to the solarRegion
 	 * - scales solarRegions onMouseOver
 	 */
+	
 	void Update() {
-		//Server: Get latest planet information
-		
-		
 		// Visual: Adds rotation to the solarRegion.
 		this.transform.Rotate(Vector3.forward * Time.deltaTime*10, Space.World);
 
@@ -59,11 +62,11 @@ public class planetScript : MonoBehaviour {
 		SphereCollider myCollider = ownIndic.transform.GetComponent<SphereCollider>();
 		myCollider.radius = 0f; // or whatever radius you want.
 
-		if (thisSR.owner == 0) {
+		if (planetData.owner == 0) {
 			ownIndic.renderer.material.color = Color.grey;
-		} else if (thisSR.owner == 1) {
+		} else if (planetData.owner == 1) {
 			ownIndic.renderer.material.color = Color.blue;
-		} else if (thisSR.owner == 2) {
+		} else if (planetData.owner == 2) {
 			ownIndic.renderer.material.color = Color.red;
 		}
 
@@ -91,17 +94,15 @@ public class planetScript : MonoBehaviour {
 	}
 
 	public void Deselect() {
-		// do i need this method?...
 		ownIndic.transform.localScale = new Vector3(1.8f, 0, 1.8f);
 		ownIndic.renderer.material.shader = shDefault;
 	}
 
 	void Select() {
 		// Tell client this region was selected:
-		startup.GetComponent<startup>().SelectSR(thisSR);
+		startup.GetComponent<startup>().SelectPlanet(this);
 		ownIndic.transform.localScale = new Vector3(2.2f, 0, 2.2f);
 		ownIndic.renderer.material.shader = shSelected;
-
 	}
 
 
@@ -110,7 +111,7 @@ public class planetScript : MonoBehaviour {
 		MouseOver = true;	
 		if (debug) {
 			//print("PLANET: entering object");
-			print("PLANET: ID: "+thisSR.id+" owner: "+thisSR.owner);
+			print("PLANET: ID: "+planetData.id+" owner: "+planetData.owner);
 		}
 	}
 
@@ -120,9 +121,5 @@ public class planetScript : MonoBehaviour {
 		if (debug) {
 			//print("PLANET: leaving object");
 		}
-	}
-
-	public void SetSR(SolReg region) {
-		thisSR = region;
 	}
 }

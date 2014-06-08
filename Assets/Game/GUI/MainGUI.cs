@@ -3,9 +3,8 @@ using System.Collections;
 using gsFramework;
 
 public class MainGUI : MonoBehaviour {
-
 	//public GUISkin mySkin;
-	public SolReg selectedSR;
+	private startup s;
 	public GameObject Player;
 	public bool showConMenu = false;
 	private int buttonClicked;
@@ -17,6 +16,7 @@ public class MainGUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
+		s = GameObject.Find("startup").GetComponent<startup>();
 	}
 	
 	// Update is called once per frame
@@ -25,8 +25,9 @@ public class MainGUI : MonoBehaviour {
 	}
 
 	void OnGUI () {
+		Planet p = s.GetPlanet();
 		resourcePanel = GUI.Window(0, resourcePanel, DrawResourcePanel, "Resources");
-		regionInfoPanel = GUI.Window(1, regionInfoPanel, DrawRegionPanel, "Region "+ selectedSR.id);
+		if(p != null) regionInfoPanel = GUI.Window(1, regionInfoPanel, DrawRegionPanel, "Planet "+ p.id);
 
 		if (showConMenu) {
 			constructionPanel = GUI.Window(2, constructionPanel, DrawConPanel, "Construction Menu");
@@ -46,42 +47,49 @@ public class MainGUI : MonoBehaviour {
 	 * 	available to the player.
 	 */
 	void DrawRegionPanel(int id) {
-		// SolReg Stats get displayed in the far left:
-		GUI.Label(new Rect(20, 20, 130, 20 ), "Region "+ selectedSR.id +" debug data");
-		GUI.Label(new Rect(20, 55, 130, 20 ), "Owned by Player "+ selectedSR.owner);
-		GUI.Label(new Rect(20, 90, 130, 20 ), "Income: "+ selectedSR.income);
-		GUI.Label(new Rect(20, 125, 130, 20 ),"Construction Slots: "+ selectedSR.slots);
-		GUI.Label(new Rect(20, 160, 130, 20 ),"Empty Slots: "+ selectedSR.emptySlots);
+		Planet p = s.GetPlanet();
+		if(p != null) {
+			// SolReg Stats get displayed in the far left:
+			GUI.Label(new Rect(20, 20, 130, 20 ), "Region "+ p.id +" debug data");
+			GUI.Label(new Rect(20, 55, 130, 20 ), "Owned by Player "+ p.owner);
+			GUI.Label(new Rect(20, 90, 130, 20 ), "Income: "+ p.income);
+			GUI.Label(new Rect(20, 125, 130, 20 ),"Construction Slots: "+ p.slots);
+			GUI.Label(new Rect(20, 160, 130, 20 ),"Empty Slots: "+ p.emptySlots);
 
-	
-		//Grid layout variables
-		int boxXY = 70;
-		int xStart = 200;
-		int yStart = 120;
-		for (int i = 0; i < selectedSR.slots; ++i) {
-			
-			if (selectedSR.buildings[i].cost == 0) {
-				if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
-					showConMenu = true;
-					buttonClicked = i;
-				}
-			} else {
-				if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), selectedSR.buildings[i].name)) {
-					//showConMenu = true;
-					//buttonClicked = i;
+		
+			//Grid layout variables
+			int boxXY = 70;
+			int xStart = 200;
+			int yStart = 120;
+			/*
+			for (int i = 0; i < selectedSR.slots; ++i) {
+				
+				if (selectedSR.buildings[i].cost == 0) {
+					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
+						showConMenu = true;
+						buttonClicked = i;
+					}
+				} else {
+					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), selectedSR.buildings[i].name)) {
+						//showConMenu = true;
+						//buttonClicked = i;
 
+					}
 				}
 			}
+			*/
 		}
 	}
 
 	void DrawConPanel(int id) {
 
-		for (int i = 0; i < Buildings.nBuildings; ++i) {
+		//for (int i = 0; i < Buildings.nBuildings; ++i) {
+		/*
 			if (GUI.Button(new Rect(20, 20+(i*25), 100, 20), "Build" +Buildings.buildings[i].name)) {
 
-			}	
-		}
+			}
+		*/
+		//}
 
 		if (GUI.Button(new Rect(150, 200, 60, 20), "Close")) {
 				showConMenu = false;

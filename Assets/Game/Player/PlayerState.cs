@@ -33,7 +33,7 @@ public class PlayerState : MonoBehaviour {
 		// find all regions where SolReg.owner == player.id
 		//TODO MOVE TO SERVER
 		income = 0;
-		for (int i = 0; i < Server.Instance.regions.Count; ++i) {
+		/*for (int i = 0; i < Server.Instance.regions.Count; ++i) {
 			SolReg reg = Server.Instance.regions[i];
 			if (reg.owner == id) {
 				income += reg.income;
@@ -41,7 +41,7 @@ public class PlayerState : MonoBehaviour {
 					income += reg.buildings[j].income;	
 				}
 			}
-		}
+		}*/
 	}
 
 	/* Increments the players credits by his current income.
