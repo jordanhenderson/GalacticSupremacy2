@@ -60,26 +60,21 @@ public class Server : MonoBehaviour {
 			p.z = 16 + (i * 10);
 			p.scale = 1;
 			p.texture = 1;
-			p.owner = 1;
+			p.owner = 0;
+
+			if (i == 0) {
+				p.owner = 1;
+			} else if (i == 9) {
+				p.owner = 2;
+			}
+
+
 			p.income = 100;
 			p.slots = 3;
 			p.emptySlots = 1;
 			s.AttachPlanet(p);
 		}
-		
-		for(int i = 0; i < 10; i++) {
-			Planet p = new Planet(i + 10);
-			p.sector = 0;
-			p.x = -14.5f + (i * 10);
-			p.z = -14.7f + (i * 10);
-			p.scale = 1;
-			p.texture = 1;
-			p.owner = 2;
-			p.income = 100;
-			p.slots = 3;
-			p.emptySlots = 1;
-			s.AttachPlanet(p);
-		}
+	
 	}
 	private IEnumerator UpdateGame() {
 		yield return www;

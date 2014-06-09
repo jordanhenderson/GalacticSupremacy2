@@ -16,9 +16,9 @@ public class cameraController : MonoBehaviour {
 
 		// set starting view to players start planet
 		if (pid == 2) {
-			initPos = new Vector3(16f, 20f, 16.5f);
+			initPos = new Vector3(106f, 20f, 106f);
 		} else if (pid == 1) {
-			initPos = new Vector3(-14.56f, 20f, -14.7f);
+			initPos = new Vector3(16f, 20f, 16f);
 		}
 		transform.localPosition = initPos;
 	}
