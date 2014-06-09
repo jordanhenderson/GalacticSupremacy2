@@ -75,10 +75,10 @@ public class Server : MonoBehaviour {
 		}
 	
 	}
-	private IEnumerator UpdateGame() {
+	
+	private IEnumerator RefreshGame() {
 		yield return www;
-		//Process the recieved game state here.
-		print (www.bytes);
+		print(ServerUtility.stringFromBytes(www.bytes));
 	}
 
 	private IEnumerator DoUpdate() {
@@ -86,7 +86,7 @@ public class Server : MonoBehaviour {
 		//Request a new game state.
 		byte[] data = ServerUtility.bytesFromString("{}");
 		www = new WWW(server_url, data, header);
-		StartCoroutine(UpdateGame());
+		yield return StartCoroutine(RefreshGame());
 	}
 
 	void Update() {
