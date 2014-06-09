@@ -26,8 +26,7 @@ function generate_gamestate() {
 			array(0,7,9.6,14.36,0.8,3,0,29,2,0,array(8, 6), array()),
 			array(0,8,6.6,3.92,0.4,3,0,3,2,0,array(9, 7), array()),
 			array(0,9,-14.56,-14.7,0.5,1,0,11,4,0,array(8), array())
-		);
-	
+		)
 	);	
 }
 
