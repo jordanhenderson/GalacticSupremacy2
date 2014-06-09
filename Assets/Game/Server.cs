@@ -39,7 +39,6 @@ public abstract class ServerObject {
 
 public class Server : MonoBehaviour {
 	private string server_url = "http://deco3800-14.uqcloud.net/game.php";
-	private int update_tick = 0;
 	protected Server() {}
 	private startup s;
 	private WWW www;
@@ -79,16 +78,18 @@ public class Server : MonoBehaviour {
 	private IEnumerator UpdateGame() {
 		yield return www;
 		//Process the recieved game state here.
+		print (www.bytes);
 	}
-	
+
+	private IEnumerator DoUpdate() {
+		yield return new WaitForSeconds(0.5f);
+		//Request a new game state.
+		byte[] data = ServerUtility.bytesFromString("{}");
+		www = new WWW(server_url, data, header);
+		StartCoroutine(UpdateGame());
+	}
+
 	void Update() {
-		update_tick = (update_tick + 1) % 1000;
-		if(update_tick == 0) {
-			//Request a new game state.
-			byte[] data = ServerUtility.bytesFromString("{}");
-			header["Content-Length"] = data.Length;
-			www = new WWW(server_url, data, header);
-			StartCoroutine(UpdateGame());
-		}
+		StartCoroutine (DoUpdate ());
 	}
 }
