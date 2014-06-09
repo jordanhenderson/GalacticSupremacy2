@@ -8,12 +8,7 @@ public class MainGUI : MonoBehaviour {
 	public GameObject Player;
 	public bool showConMenu = false;
 	private int buttonClicked;
-	//private int startTime;
-	//private int restSec;
-	//private int displaySec;
-	//private int displayMin;
-
-	//int countDownSec;
+	private int turn = 1;
 
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
@@ -36,9 +31,6 @@ public class MainGUI : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		//int guiTime = Time.time-startTime;
-
-		//restSec = countDownSec - guiTime;
 
 		Planet p = s.GetPlanet();
 		resourcePanel = GUI.Window(0, resourcePanel, DrawResourcePanel, "Resources");
@@ -50,7 +42,7 @@ public class MainGUI : MonoBehaviour {
 		}
 		
 		if (GUI.Button (endTurn, "End Turn")) {
-
+			turn++;
 		}
 	}
 
@@ -59,7 +51,7 @@ public class MainGUI : MonoBehaviour {
 		int income = Player.GetComponent<PlayerState>().income;
 		GUI.Label(new Rect(20, 20, 120, 20 ), "Credits: $"+ credits);
 		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income +"/sec");
-		GUI.Label(new Rect(220, 20, 120, 20 ),"Fleet Upkeep: 5/20");
+		GUI.Label(new Rect(220, 20, 120, 20 ),"Turn " + turn);
 	}
 
 	/*	This function draws the panel at the bottom of the screen which shows
