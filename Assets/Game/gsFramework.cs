@@ -24,11 +24,6 @@ namespace gsFramework
 			adjacent = new List<int>();
 			buildings = new List<int>();
 		}
-		public override void UpdateData(byte[] data)
-		{
-			//Update the object.
-		}
-		
 	}
 
 	/* Buildings are the options a player has to develop their SolarRegions.
@@ -42,10 +37,6 @@ namespace gsFramework
 		public Building(int id) : base(id, ObjectType.OBJECT_BULIDING)
 		{
 
-		}
-		public override void UpdateData(byte[] data)
-		{
-			//Update the object.
 		}
 	}
 }

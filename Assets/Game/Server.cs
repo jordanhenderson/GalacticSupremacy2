@@ -29,12 +29,6 @@ public abstract class ServerObject {
 		id = _id;
 		type = _type;
 	}
-	public void Submit() {
-		//Push the object to the server.
-	}
-	//Update() is called with the byte array returned from the Refresh request.
-	//Update should be implemented for each ServerObject instance.
-	public abstract void UpdateData(byte[] data);
 }
 
 public class Server : MonoBehaviour {
@@ -50,7 +44,10 @@ public class Server : MonoBehaviour {
 	}
 
 	void Start() {
+		buildings = new List<Building>();
+		
 		header.Add ("Content-Type", "text/json");
+		
 		s = GameObject.Find("startup").GetComponent<startup>();
 		
 		//Create the initial planets. TODO: Read this from server.
