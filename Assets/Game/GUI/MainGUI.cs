@@ -42,6 +42,7 @@ public class MainGUI : MonoBehaviour {
 		}
 		
 		if (GUI.Button (endTurn, "End Turn")) {
+			
 			turn++;
 		}
 	}
@@ -50,7 +51,7 @@ public class MainGUI : MonoBehaviour {
 		int credits = Player.GetComponent<PlayerState>().credits;
 		int income = Player.GetComponent<PlayerState>().income;
 		GUI.Label(new Rect(20, 20, 120, 20 ), "Credits: $"+ credits);
-		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income +"/sec");
+		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income +"/turn");
 		GUI.Label(new Rect(220, 20, 120, 20 ),"Turn " + turn);
 	}
 
@@ -73,23 +74,23 @@ public class MainGUI : MonoBehaviour {
 			int boxXY = 70;
 			int xStart = 200;
 			int yStart = 120;
-			/*
-			for (int i = 0; i < selectedSR.slots; ++i) {
+			
+			for (int i = 0; i < p.slots; ++i) {
 				
-				if (selectedSR.buildings[i].cost == 0) {
+				if (p.buildings[i].cost == 0) {
 					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
 						showConMenu = true;
 						buttonClicked = i;
 					}
 				} else {
-					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), selectedSR.buildings[i].name)) {
-						//showConMenu = true;
-						//buttonClicked = i;
+					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), p.buildings[i].name)) {
+						showConMenu = true;
+						buttonClicked = i;
 
 					}
 				}
 			}
-			*/
+			
 		}
 	}
 
