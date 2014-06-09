@@ -39,4 +39,16 @@ namespace gsFramework
 
 		}
 	}
+
+	/* Player states represent player statistics.
+	 */
+	public class PlayerState : ServerObject {
+		public int credits;
+		public int income;
+		public PlayerState (int id): base(id, ObjectType.OBJECT_PLAYERSTATE)
+		{
+
+		}
+	}
+
 }

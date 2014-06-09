@@ -1,26 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using gsFramework;
 
 public class cameraController : MonoBehaviour {
 	int cameraVelocity = 1;
-	public float camspeed;
-	public GameObject player;
-	private int pid;
+	public float camspeed = 20;
+	public Server server;
 	private Vector3 initPos;
 
 	// Initialization
 	void Start () {
-		// determine which player is active
-		player = GameObject.Find("Player 1");
-		pid = player.GetComponent<PlayerState>().id;
+		NextTurn ();
+	}
 
+	public void NextTurn() {
+		int pid = server.GetCurrentPlayer ().id;
+		Planet p = server.GetMainPlanet (pid); 
 		// set starting view to players start planet
-		if (pid == 2) {
-			initPos = new Vector3(106f, 20f, 106f);
-		} else if (pid == 1) {
-			initPos = new Vector3(16f, 20f, 16f);
-		}
-		transform.localPosition = initPos;
+		int offset = 10;
+		if (pid == 0) offset *= -1;
+		transform.localPosition = new Vector3(p.x + offset, 20, p.z + offset);
+
+		transform.LookAt (new Vector3(p.x, 0, p.z));
 	}
 	
 	// Update is called once per frame

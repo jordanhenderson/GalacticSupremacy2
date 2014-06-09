@@ -19,7 +19,8 @@ public static class ServerUtility {
 
 public enum ObjectType {
 	OBJECT_BULIDING,
-	OBJECT_PLANET
+	OBJECT_PLANET,
+	OBJECT_PLAYERSTATE
 }
 
 public abstract class ServerObject {
@@ -32,26 +33,68 @@ public abstract class ServerObject {
 }
 
 public class Server : MonoBehaviour {
-	private string server_url = "http://deco3800-14.uqcloud.net/game.php";
-	protected Server() {}
 	private startup s;
 	private int state = 0;
 	private WWW www;
-	private List<Building> buildings;
 	private Hashtable header = new Hashtable ();
+	private string server_url = "http://deco3800-14.uqcloud.net/game.php";
+
+	private List<Building> buildings;
+	private List<PlayerState> players;
+	private List<planetScript> planets;
+
+	//Keep player id for prototype purposes (switch between players).
+	private int pid = 0;
+	private int turn = 0;
+	
 	public Building GetBuilding(int id) {
 		return buildings[id];
 	}
-	
-	public int GetIncome(int id) {
-		
+
+	//Get a specific player
+	public PlayerState GetPlayer(int id) {
+		return players [id];
 	}
 
+
+	//Get the current (prototype only - turn based) player
+	public PlayerState GetCurrentPlayer() {
+		if (players != null) return players [pid];
+		else return null;
+	}
+
+	public Planet GetMainPlanet(int pid) {
+		for (int i = 0; i < planets.Count; i++) {
+			Planet p = planets[i].GetPlanet ();
+			if(p.owner == pid) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	//Prototype-only method
+	public void NextTurn() {
+		if (pid == 1) {
+			turn++;
+			//Process the update (prototype only - move to startupdate later.
+			byte[] empty = new byte[0];
+			ProcessUpdate (empty);
+		}
+		pid = (pid + 1) % 2;
+	}
+
+	public int GetTurn() {
+		return turn;
+	}
+
+	//mixed clientside/serverside
 	void Start() {
 		buildings = new List<Building>();
+		players = new List<PlayerState> ();
+		planets = new List<planetScript> ();
 		
-		header.Add ("Content-Type", "text/json");
-		header.Add ("Cookie", "PHPSESSID=sbvcr7sgdll0n8756psrjr7hp3");
+		header.Add ("Content-Type", "application/json");
 		
 		s = GameObject.Find("startup").GetComponent<startup>();
 		
@@ -74,7 +117,7 @@ public class Server : MonoBehaviour {
 			p.income = 100;
 			p.slots = 3;
 			p.emptySlots = 1;
-			s.AttachPlanet(p);
+			planets.Add (s.AttachPlanet(p));
 		}
 		
 		for(int i = 0; i < 4; i++) {
@@ -86,23 +129,61 @@ public class Server : MonoBehaviour {
 			b.imageURL = "building" + i + ".jpg";
 			buildings.Add(b);
 		}
+		//Add Two players
+		players.Add (new PlayerState (0));
+		players.Add (new PlayerState (1));
+		//Start the game state. (prototype only)
+		byte[] empty = new byte[0];
+		ProcessUpdate (empty);
 	}
-	
-	private IEnumerator DoUpdate() {
+
+	//Serverside
+	public int GetIncome(int pid) {
+		//Provide data for the current player only (+security checks).
+		int income = 0;
+		for(int j = 0; j < planets.Count; j++) {
+			Planet p = planets[j].GetPlanet ();
+			//For each planet, add planet income and building income.
+			if(p.owner == players[pid].id) {
+				//Player owns the planet, add income.
+				income += p.income;
+				for(int k = 0; k < p.buildings.Count; k++) {
+					income += GetBuilding(p.buildings[k]).income;
+				}
+			}
+		}
+		return income;
+	}
+	/*
+	 * The logic in this function should be moved server-side.
+	 * This function should be called on a timer (part of the game state).
+	 */
+	private void ProcessUpdate(byte[] data) {
+		//Update the player credits.
+		for (int i = 0; i < players.Count; i++) {
+			//Calculate/Apply the players income server-side.
+			//Apply the calculated credits.
+			int income = GetIncome (i);
+			players[i].credits = players[i].credits + income;
+			players[i].income = income;
+		}
+	}
+
+	private IEnumerator StartUpdate() {
 		if (state == 0 || state == 2) {
 			state = 1;
 			yield return new WaitForSeconds (1);
 			//Request a new game state.
-			byte[] data = ServerUtility.bytesFromString ("{}");
+			byte[] data = ServerUtility.bytesFromString ("{\"auth\":\"sbvcr7sgdll0n8756psrjr7hp3\"}");
 			www = new WWW (server_url, data, header);
 			yield return www;
 			if(www.error == null) state = 2;
 			else print(www.error);
-			print (ServerUtility.stringFromBytes (www.bytes));
+			//ProcessUpdate (www.bytes);
 		}
 	}
 
 	void Update() {
-		StartCoroutine (DoUpdate ());
+		StartCoroutine (StartUpdate ());
 	}
 }

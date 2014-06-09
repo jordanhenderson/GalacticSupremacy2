@@ -3,14 +3,10 @@ using System.Collections;
 using gsFramework;
 
 public class MainGUI : MonoBehaviour {
-	//public GUISkin mySkin;
-	private startup s;
-	public GameObject Player;
+	public startup s;
+	public Server server;
 	public bool showConMenu = false;
 	private int buttonClicked;
-	private int turn = 1;
-
-	public int pid = 1;
 
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
@@ -23,18 +19,15 @@ public class MainGUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Player = GameObject.Find("Player " + pid);
-		s = GameObject.Find("startup").GetComponent<startup>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
 	void OnGUI () {
-
 		Planet p = s.GetPlanet();
+		int pid = server.GetCurrentPlayer ().id + 1;
 		resourcePanel = GUI.Window(0, resourcePanel, DrawResourcePanel, "Player " + pid + ": Resources");
 
 		if(p != null) regionInfoPanel = GUI.Window(1, regionInfoPanel, DrawRegionPanel, "Planet "+ p.id);
@@ -44,23 +37,18 @@ public class MainGUI : MonoBehaviour {
 		}
 		
 		if (GUI.Button (endTurn, "End Turn")) {
-			if (pid == 1) {
-				pid = 2;
-
-			} else if (pid == 2) {
-				pid = 1;
-				turn++;
-			}
-			Player = GameObject.Find("Player " + pid);
+			server.NextTurn();
+			s.mainCamera.GetComponent<cameraController>().NextTurn();
 		}
 	}
 
 	void DrawResourcePanel(int id) {
-		int credits = Player.GetComponent<PlayerState>().credits;
-		int income = Player.GetComponent<PlayerState>().income;
+		PlayerState p = server.GetCurrentPlayer ();
+		int credits = p.credits;
+		int income = p.income;
 		GUI.Label(new Rect(20, 20, 120, 20 ), "Credits: $"+ credits);
 		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income +"/turn");
-		GUI.Label(new Rect(220, 20, 120, 20 ),"Turn " + turn);
+		GUI.Label(new Rect(220, 20, 120, 20 ),"Turn " + server.GetTurn ());
 	}
 
 	/*	This function draws the panel at the bottom of the screen which shows

@@ -8,22 +8,33 @@ using gsFramework;
  * holds information about the players GUI interaction (selection).
  */ 
 public class startup : MonoBehaviour {
-	public GameObject game;
+	public Server server;
 	public planetScript selectedPlanet;
-	public int selected = 0;
-	GameObject selector;
-	GameObject guiController;
+	public GameObject selector;
+	public GameObject mainCamera;
+	public GameObject mainGUI;
 
 	/* Initialization. Queries the server for the data needed to build and
 	 * render the map. This includes the number regions, and data
 	 */
 	void Start () {
+		//Create server component first (handles main game logic)
+		server = gameObject.AddComponent<Server>();
+		//Create camera
+		mainCamera = GameObject.Find ("MainCamera");
+		mainCamera.AddComponent<cameraController> ().server = server;
+	
+		//Create GUI
+		mainGUI = new GameObject();
+		MainGUI gui = mainGUI.AddComponent<MainGUI> ();
+		gui.server = server;
+		gui.s = this;
+
+		//Create planet selector.
 		selector = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 		// selector is invisible until a selection is made
 		selector.renderer.enabled = false;
-		
-		game = new GameObject();
-		game.AddComponent<Server>();
+
 	}
 
 	void Update() {
@@ -49,7 +60,7 @@ public class startup : MonoBehaviour {
 	}
 
 	//This function attaches a planet object to the game.
-	public void AttachPlanet(Planet p) {
+	public planetScript AttachPlanet(Planet p) {
 		GameObject sphere = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 		sphere.transform.localPosition = new Vector3(p.x, 0, p.z);
 		sphere.transform.localRotation = Quaternion.Euler (90, 0, 0);
@@ -64,8 +75,7 @@ public class startup : MonoBehaviour {
 		//Create the planet script
 		planetScript ps = sphere.AddComponent<planetScript>();
 		ps.SetPlanet(p);
-		
-		// give the GO a meaningful name
-		sphere.name = "Planet "+ p.id;
+		return ps;
+
 	}
 }
