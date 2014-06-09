@@ -1,10 +1,27 @@
 <?php
-function send_chat($request) {
+session_start();
+$msgs = $_SESSION['msgs'];
+$ctr = $_SESSION['msg'];
 
+function send_chat($request) {
+	global $msgs;
+	global $ctr;
+	$msg = array("msg"=>$request['msg'], "id" => ++$ctr);
+	array_push($msgs, $request['msg']);
+	$_SESSION['msgs'] = $msgs;
+	$_SESSION['msg'] = $ctr;
 }
 
 function get_chat($request) {
-
+	global $msgs;
+	global $ctr;
+	$tgt_msgs = array();
+	$last = $request['ctr'];
+	foreach($msgs as $msg) {
+		if($msg["id"] > $last)
+		array_push($tgt_msgs, $msg["msg"]);
+	}
+	return json_encode(array($last, $tgt_msgs));
 }
 
 //Global gamestate object
@@ -37,10 +54,7 @@ This should only be called upon player connection.
 
 function get_gamestate($request) {
 	global $gamestate;
-	$state = $request['state'];
-	if($state < count($gamestate)) 
-		echo json_encode($gamestate);
-	else echo "{}";
+	echo json_encode($gamestate);
 }
 
 function player_event($request) {
