@@ -71,11 +71,11 @@ public class MainGUI : MonoBehaviour {
 		Planet p = s.GetPlanet();
 		if(p != null) {
 			// SolReg Stats get displayed in the far left:
-			GUI.Label(new Rect(20, 20, 130, 20 ), "Region "+ p.id +" debug data");
-			GUI.Label(new Rect(20, 55, 130, 20 ), "Owned by Player "+ p.owner);
-			GUI.Label(new Rect(20, 90, 130, 20 ), "Income: "+ p.income);
-			GUI.Label(new Rect(20, 125, 130, 20 ),"Construction Slots: "+ p.slots);
-			GUI.Label(new Rect(20, 160, 130, 20 ),"Empty Slots: "+ p.emptySlots);
+			GUI.Label(new Rect(20, 20, 130, 20), "Region "+ p.id +" debug data");
+			GUI.Label(new Rect(20, 55, 130, 20), "Owned by Player "+ p.owner);
+			GUI.Label(new Rect(20, 90, 130, 20), "Income: "+ p.income);
+			GUI.Label(new Rect(20, 125, 130, 20),"Construction Slots: "+ p.slots);
+			GUI.Label(new Rect(20, 160, 130, 20),"Empty Slots: "+ p.emptySlots);
 
 		
 			//Grid layout variables
