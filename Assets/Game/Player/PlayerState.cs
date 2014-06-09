@@ -4,7 +4,8 @@ using gsFramework;
 
 // server side class, needs 1 instance per player
 public class PlayerState : MonoBehaviour {
-	
+	private startup s;
+	private Server server;
 	public int id;
 	public float incomeTime = 1f;
 	public int income = 10;
@@ -17,6 +18,8 @@ public class PlayerState : MonoBehaviour {
 	}
 
 	void Start () {
+		s = GameObject.Find("startup").GetComponent<startup>();
+		server = s.GetComponent<Server> ();
 		// in incomeTime intervals, run "addIncome"
 		//InvokeRepeating("computeIncome", incomeTime, incomeTime);
 		//InvokeRepeating("addIncome", incomeTime, incomeTime);
@@ -32,17 +35,7 @@ public class PlayerState : MonoBehaviour {
 	public void computeIncome () {
 		// find all regions where SolReg.owner == player.id
 		//TODO MOVE TO SERVER
-		income = 0;
-		/*for (int i = 0; i < Server.Instance.regions.Count; ++i) {
-			SolReg reg = Server.Instance.regions[i];
-			if (reg.owner == id) {
-				income += reg.income;
-				for (int j = 0; j < reg.slots; ++j) {
-					income += reg.buildings[j].income;	
-				}
-			}
-		}*/
-
+		income = server.GetIncome (id);
 		credits += 10;
 	}
 

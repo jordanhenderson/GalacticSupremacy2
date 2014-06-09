@@ -42,11 +42,16 @@ public class Server : MonoBehaviour {
 	public Building GetBuilding(int id) {
 		return buildings[id];
 	}
+	
+	public int GetIncome(int id) {
+		
+	}
 
 	void Start() {
 		buildings = new List<Building>();
 		
 		header.Add ("Content-Type", "text/json");
+		header.Add ("Cookie", "PHPSESSID=sbvcr7sgdll0n8756psrjr7hp3");
 		
 		s = GameObject.Find("startup").GetComponent<startup>();
 		
