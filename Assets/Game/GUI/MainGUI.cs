@@ -21,7 +21,7 @@ public class MainGUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Player = GameObject.Find("Player");
+		Player = GameObject.Find("Player 1");
 		s = GameObject.Find("startup").GetComponent<startup>();
 	}
 	

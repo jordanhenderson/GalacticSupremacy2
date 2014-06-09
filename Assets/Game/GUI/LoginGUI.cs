@@ -26,15 +26,10 @@ public class LoginGUI : MonoBehaviour {
 		int button_x = (Screen.width - 80) / 2;
 		int button_y = (Screen.height - 60) / 2;
 	// Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
-		if(GUI.Button(new Rect(button_x,button_y,80,20), "Player Blue")) {
-			player.GetComponent<PlayerState>().id = 1;
+		if(GUI.Button(new Rect(button_x,button_y,80,20), "Start")) {
+			//player.GetComponent<PlayerState>().id = 1;
 			Application.LoadLevel("scene1");
 		}
 
-		// Make the second button.
-		if(GUI.Button(new Rect(button_x,button_y + 30,80,20), "Player Red")) {
-			player.GetComponent<PlayerState>().id = 2;
-			Application.LoadLevel("scene1");
-		}
 	}
 }

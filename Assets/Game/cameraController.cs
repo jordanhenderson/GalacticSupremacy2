@@ -11,7 +11,7 @@ public class cameraController : MonoBehaviour {
 	// Initialization
 	void Start () {
 		// determine which player is active
-		player = GameObject.Find("Player");
+		player = GameObject.Find("Player 1");
 		pid = player.GetComponent<PlayerState>().id;
 
 		// set starting view to players start planet

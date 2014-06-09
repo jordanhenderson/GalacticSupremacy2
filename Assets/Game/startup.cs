@@ -43,7 +43,7 @@ public class startup : MonoBehaviour {
 		selectedPlanet = ps;
 		Planet p = selectedPlanet.GetPlanet();
 		selector.renderer.enabled = true;
-		selector.transform.localPosition = new Vector3(p.x, 0.1f, p.z);
+		selector.transform.localPosition = new Vector3(p.x, -0.1f, p.z);
 		selector.transform.localScale = new Vector3(1.8f, 0, 1.8f);
 		selector.renderer.material.color = Color.white;
 	}
