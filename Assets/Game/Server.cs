@@ -67,7 +67,6 @@ public class Server : MonoBehaviour {
 				p.owner = 2;
 			}
 
-
 			p.income = 100;
 			p.slots = 3;
 			p.emptySlots = 1;

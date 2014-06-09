@@ -8,11 +8,22 @@ public class MainGUI : MonoBehaviour {
 	public GameObject Player;
 	public bool showConMenu = false;
 	private int buttonClicked;
+	//private int startTime;
+	//private int restSec;
+	//private int displaySec;
+	//private int displayMin;
+
+	//int countDownSec;
 
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
 	Rect constructionPanel = new Rect(Screen.width/3, Screen.height/5, 250, 250);
+	Rect endTurn = new Rect(Screen.width-100, 0, 100, 50);
 	
+	void Awake() {
+		//startTime = Time.time;
+	}
+
 	// Use this for initialization
 	void Start () {
 		Player = GameObject.Find("Player");
@@ -25,12 +36,21 @@ public class MainGUI : MonoBehaviour {
 	}
 
 	void OnGUI () {
+		//int guiTime = Time.time-startTime;
+
+		//restSec = countDownSec - guiTime;
+
 		Planet p = s.GetPlanet();
 		resourcePanel = GUI.Window(0, resourcePanel, DrawResourcePanel, "Resources");
+
 		if(p != null) regionInfoPanel = GUI.Window(1, regionInfoPanel, DrawRegionPanel, "Planet "+ p.id);
 
 		if (showConMenu) {
 			constructionPanel = GUI.Window(2, constructionPanel, DrawConPanel, "Construction Menu");
+		}
+		
+		if (GUI.Button (endTurn, "End Turn")) {
+
 		}
 	}
 
