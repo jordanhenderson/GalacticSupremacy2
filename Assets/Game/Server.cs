@@ -43,13 +43,14 @@ public class Server : MonoBehaviour {
 	private startup s;
 	private int state = 0;
 	private WWW www;
-	
+	private List<Building> buildings;
 	private Hashtable header = new Hashtable ();
-	void Startup() {
-		header.Add ("Content-Type", "text/json");
+	public Building GetBuilding(int id) {
+		return buildings[id];
 	}
 
 	void Start() {
+		header.Add ("Content-Type", "text/json");
 		s = GameObject.Find("startup").GetComponent<startup>();
 		
 		//Create the initial planets. TODO: Read this from server.
@@ -73,7 +74,16 @@ public class Server : MonoBehaviour {
 			p.emptySlots = 1;
 			s.AttachPlanet(p);
 		}
-	
+		
+		for(int i = 0; i < 4; i++) {
+			Building b = new Building(i);
+			b.name = "Building " + i;
+			b.cost = 100 + (i*100);
+			b.income = 10 + (i* 10);
+			b.constructionTime = 30.0f + (10 * i);
+			b.imageURL = "building" + i + ".jpg";
+			buildings.Add(b);
+		}
 	}
 	
 	private IEnumerator DoUpdate() {

@@ -34,7 +34,7 @@ namespace gsFramework
 	/* Buildings are the options a player has to develop their SolarRegions.
 	 */
 	public class Building : ServerObject {
-		public string b_name;				// The name of this building.
+		public string name;				// The name of this building.
 		public int cost;				// Construction Cost
 		public int income;			// Income this building adds
 		public float constructionTime;	// Time it takes to construct this building
