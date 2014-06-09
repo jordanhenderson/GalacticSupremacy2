@@ -14,13 +14,13 @@ $request = $r['data'];
 
 switch($action) {
 	case $ACTION_SEND_CHAT:
-		return send_chat($request);
+		echo send_chat($request);
 	case $ACTION_GET_CHAT:
-		return get_chat($request);
+		echo get_chat($request);
 	case $ACTION_GET_GAMESTATE:
-		return get_gamestate($request);
+		echo get_gamestate($request);
 	case $ACTION_PLAYER_EVENT:
-		return player_event($request);
+		echo player_event($request);
 }
 
 ?>
