@@ -74,7 +74,7 @@ public class MainGUI : MonoBehaviour {
 			int boxXY = 70;
 			int xStart = 200;
 			int yStart = 120;
-			
+			/*
 			for (int i = 0; i < p.slots; ++i) {
 				
 				if (p.buildings[i].cost == 0) {
@@ -90,6 +90,7 @@ public class MainGUI : MonoBehaviour {
 					}
 				}
 			}
+			*/
 			
 		}
 	}
