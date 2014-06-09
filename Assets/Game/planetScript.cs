@@ -36,6 +36,7 @@ public class planetScript : MonoBehaviour {
 
 	void Start() {
 		ownIndic = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+		SetOwner();
 	}
 	
 	/* Update is called once per frame:
