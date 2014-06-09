@@ -44,6 +44,8 @@ public class MainGUI : MonoBehaviour {
 		}
 		
 		if (GUI.Button (endTurn, "End Turn")) {
+			Player.GetComponent<PlayerState>().computeIncome();
+
 			if (pid == 1) {
 				pid = 2;
 
@@ -52,6 +54,8 @@ public class MainGUI : MonoBehaviour {
 				turn++;
 			}
 			Player = GameObject.Find("Player " + pid);
+
+			print("Player " + pid + " has " + Player.GetComponent<PlayerState>().credits + " credits");
 		}
 	}
 
