@@ -18,8 +18,8 @@ public class PlayerState : MonoBehaviour {
 
 	void Start () {
 		// in incomeTime intervals, run "addIncome"
-		InvokeRepeating("computeIncome", incomeTime, incomeTime);
-		InvokeRepeating("addIncome", incomeTime, incomeTime);
+		//InvokeRepeating("computeIncome", incomeTime, incomeTime);
+		//InvokeRepeating("addIncome", incomeTime, incomeTime);
 	}
 	
 	void Update () {
@@ -42,6 +42,8 @@ public class PlayerState : MonoBehaviour {
 				}
 			}
 		}*/
+
+		credits += 10;
 	}
 
 	/* Increments the players credits by his current income.
