@@ -10,6 +10,8 @@ public class MainGUI : MonoBehaviour {
 	private int buttonClicked;
 	private int turn = 1;
 
+	public int pid = 1;
+
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
 	Rect constructionPanel = new Rect(Screen.width/3, Screen.height/5, 250, 250);
@@ -21,7 +23,7 @@ public class MainGUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Player = GameObject.Find("Player 1");
+		Player = GameObject.Find("Player " + pid);
 		s = GameObject.Find("startup").GetComponent<startup>();
 	}
 	
@@ -33,7 +35,7 @@ public class MainGUI : MonoBehaviour {
 	void OnGUI () {
 
 		Planet p = s.GetPlanet();
-		resourcePanel = GUI.Window(0, resourcePanel, DrawResourcePanel, "Resources");
+		resourcePanel = GUI.Window(0, resourcePanel, DrawResourcePanel, "Player " + pid + ": Resources");
 
 		if(p != null) regionInfoPanel = GUI.Window(1, regionInfoPanel, DrawRegionPanel, "Planet "+ p.id);
 
@@ -42,8 +44,14 @@ public class MainGUI : MonoBehaviour {
 		}
 		
 		if (GUI.Button (endTurn, "End Turn")) {
-			
-			turn++;
+			if (pid == 1) {
+				pid = 2;
+
+			} else if (pid == 2) {
+				pid = 1;
+				turn++;
+			}
+			Player = GameObject.Find("Player " + pid);
 		}
 	}
 
