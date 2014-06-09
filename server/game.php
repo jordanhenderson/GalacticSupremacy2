@@ -22,6 +22,3 @@ function handle_request($r) {
 	}
 }
 echo handle_request($r);
-
-
-?>
