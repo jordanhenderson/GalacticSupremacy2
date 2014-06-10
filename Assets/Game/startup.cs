@@ -43,7 +43,9 @@ public class startup : MonoBehaviour {
 	
 	public Planet GetPlanet() {
 		//Get the underlying planet data of the currently selected planet.
-		if(selectedPlanet != null) return selectedPlanet.GetPlanet();
+		if (selectedPlanet != null) { 
+					return selectedPlanet.GetPlanet ();
+			}
 		else return null;
 	}
 

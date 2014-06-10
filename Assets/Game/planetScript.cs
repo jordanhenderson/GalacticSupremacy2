@@ -21,6 +21,8 @@ public class planetScript : MonoBehaviour {
 	public void SetPlanet(Planet p) {
 		planetData = p;
 	}
+
+
 	
 	public Planet GetPlanet() {
 		return planetData;
