@@ -20,6 +20,7 @@ public class planetScript : MonoBehaviour {
 	
 	public void SetPlanet(Planet p) {
 		planetData = p;
+		this.name = "Planet " + p.id;
 	}
 
 

@@ -90,7 +90,7 @@ public class Server : MonoBehaviour {
 
 	//mixed clientside/serverside
 	void Start() {
-		buildings = new List<Building>();
+		buildings = new List<Building> ();
 		players = new List<PlayerState> ();
 		planets = new List<planetScript> ();
 		
@@ -98,6 +98,8 @@ public class Server : MonoBehaviour {
 		
 		s = GameObject.Find("startup").GetComponent<startup>();
 		
+
+		createBuildings();
 		//Create the initial planets. TODO: Read this from server.
 		for(int i = 0; i < 10; i++) {
 			Planet p = new Planet(i);
@@ -116,10 +118,17 @@ public class Server : MonoBehaviour {
 
 			p.income = 100;
 			p.slots = 3;
-			p.emptySlots = 1;
+			//p.emptySlots = 1;  // not needed for now
+			for (int j = 0; j < p.slots; j++) {
+				int t = 0;
+				p.buildings.Add(t);
+				//print(j+": done");
+			}
 			planets.Add (s.AttachPlanet(p));
 		}
-		
+		/* 
+		 * This loop creates mockup data for the buildings.
+		 * No longer needed as of implementation of proper buildings.
 		for(int i = 0; i < 4; i++) {
 			Building b = new Building(i);
 			b.name = "Building " + i;
@@ -129,6 +138,9 @@ public class Server : MonoBehaviour {
 			b.imageURL = "building" + i + ".jpg";
 			buildings.Add(b);
 		}
+		*/
+
+
 		//Add Two players
 		players.Add (new PlayerState (0));
 		players.Add (new PlayerState (1));
@@ -136,6 +148,23 @@ public class Server : MonoBehaviour {
 		byte[] empty = new byte[0];
 		ProcessUpdate (empty);
 	}
+
+	// Populate building list
+	private void createBuildings() {
+		// constructor: id, name, cost, income, time, url
+		Building b = new Building(0, "Empty", 0, 0, 0, "");
+		buildings.Add(b);
+
+		b = new Building(1, "Headquarters", 200, 0, 5, "");
+		buildings.Add(b);
+
+		b = new Building(2, "Mine", 200, 100, 2, "");
+		buildings.Add(b);
+
+		b = new Building(3, "Shipwright", 200, 0, 2, "");
+		buildings.Add(b);
+	}
+
 
 	//Serverside
 	public int GetIncome(int pid) {

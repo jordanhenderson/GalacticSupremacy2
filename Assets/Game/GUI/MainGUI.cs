@@ -56,7 +56,7 @@ public class MainGUI : MonoBehaviour {
 		int income = p.income;
 		GUI.Label(new Rect(20, 20, 120, 20 ), "Credits: $"+ credits);
 		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income +"/turn");
-		GUI.Label(new Rect(220, 20, 120, 20 ),"Turn " + server.GetTurn ());
+		GUI.Label(new Rect(240, 20, 120, 20 ),"Turn " + server.GetTurn ());
 
 	}
 
@@ -73,7 +73,7 @@ public class MainGUI : MonoBehaviour {
 			GUI.Label(new Rect(20, 55, 130, 20), "Owned by Player "+ p.owner);
 			GUI.Label(new Rect(20, 90, 130, 20), "Income: "+ p.income);
 			GUI.Label(new Rect(20, 125, 130, 20),"Construction Slots: "+ p.slots);
-			GUI.Label(new Rect(20, 160, 130, 20),"Empty Slots: "+ p.emptySlots);
+			//GUI.Label(new Rect(20, 160, 130, 20),"Empty Slots: "+ p.emptySlots);
 
 			if (GUI.Button (closeButton, "Close")) {
 				windowOpen = false;    
@@ -84,9 +84,15 @@ public class MainGUI : MonoBehaviour {
 			int boxXY = 70;
 			int xStart = 200;
 			int yStart = 120;
-			/*
+			//print ("hi");
 			for (int i = 0; i < p.slots; ++i) {
-				
+				//print ("i: "+i);
+
+				if (server.GetBuilding(p.buildings[i]).id == 0) {
+					//print ("is empty");
+				}
+				//print ("id " + server.GetBuilding(p.buildings[i]).id);
+				/*
 				if (p.buildings[i].cost == 0) {
 					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
 						showConMenu = true;
@@ -99,8 +105,9 @@ public class MainGUI : MonoBehaviour {
 
 					}
 				}
+				*/
 			}
-			*/
+			
 			
 		}
 	}

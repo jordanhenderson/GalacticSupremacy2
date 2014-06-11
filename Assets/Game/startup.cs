@@ -76,6 +76,7 @@ public class startup : MonoBehaviour {
 
 		//Create the planet script
 		planetScript ps = sphere.AddComponent<planetScript>();
+
 		ps.SetPlanet(p);
 		return ps;
 
