@@ -19,12 +19,15 @@ public class planetScript : MonoBehaviour {
 		this.name = "Planet " + p.id;
 	}
 
-
-	
 	public Planet GetPlanet() {
 		return planetData;
 	}
 	
+	public void AddAdjacent(Planet p) {
+		
+		planetData.adjacent.Add(p.id);
+	}
+
 	void Awake() {
 		newScale = transform.localScale;
 		//isSelected = false;

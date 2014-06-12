@@ -141,7 +141,10 @@ public class Server : MonoBehaviour {
 				//print(j+": done");
 			}
 			planets.Add (s.AttachPlanet(p));
+			
 		}
+		SetAdjacencies();
+
 
 		//Add Two players
 		players.Add (new PlayerState (0));
@@ -149,6 +152,34 @@ public class Server : MonoBehaviour {
 		//Start the game state. (prototype only)
 		byte[] empty = new byte[0];
 		ProcessUpdate (empty);
+	}
+
+
+	private void SetAdjacencies() {
+		GameObject p1, p2;
+		Vector3 pos1, pos2;
+		float distance;
+
+		int count = planets.Count;		
+		for (int i = 0; i < count; i++) {
+			p1 = GameObject.Find("Planet "+i);
+			
+			for (int j = i+1; j < count; j++) {
+				//if (i == j) continue; // dont consider distance to self
+				
+				p2 = GameObject.Find("Planet "+j);
+				distance = Vector3.Distance(p1.transform.position, p2.transform.position);
+				//print("distance " + p1 +"to "+ p2 +": " + distance);
+
+				if (distance < 20f) {
+					planets[i].AddAdjacent(planets[j].GetPlanet());
+					planets[j].AddAdjacent(planets[i].GetPlanet());
+
+					// create some line/indicator object
+				}
+				
+			}
+		}
 	}
 
 	// Populate building list

@@ -66,6 +66,12 @@ public class MainGUI : MonoBehaviour {
 	 * 	available to the player.
 	 */
 	void DrawRegionPanel(int id) {
+		//Grid layout variables
+		int boxXY = 70;
+		int xStart = 200;
+		int yStart = 120;
+
+
 		Planet p = s.GetPlanet();
 		if(p != null) {
 
@@ -81,30 +87,41 @@ public class MainGUI : MonoBehaviour {
 			}
 			old_planet = p;
 
-			//Grid layout variables
-			int boxXY = 70;
-			int xStart = 200;
-			int yStart = 120;
-			//print ("hi");
-			for (int i = 0; i < p.slots; ++i) {
-				//print ("i: "+i);
-
-				if (server.GetBuilding(p.buildings[i]).id == 0) {
-					//print ("is empty");
-					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
-						showConMenu = true;
-						buttonClicked = i;
-					}
-				} else {
-					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), server.GetBuilding(p.buildings[i]).name)) {
-						showConMenu = true;
-						buttonClicked = i;
-					}
+			// Case 1: Planet is owned by player, display construction options
+			if (p.owner == pid) {	
+				for (int i = 0; i < p.slots; ++i) {
+					if (server.GetBuilding(p.buildings[i]).id == 0) {
+						//print ("is empty");
+						if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
+							showConMenu = true;
+							buttonClicked = i;
+						}
+					} else {
+						if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), server.GetBuilding(p.buildings[i]).name)) {
+							showConMenu = true;
+							buttonClicked = i;
+						}
+					}	
 				}
-				
+			// Case 2: Planet is not owned by player, but is adjacent.
+			// Display expansion option:
+				/*	Conditions:
+				 *	- is not owned by any player
+				 *	- is adjacent to an owned planet
+				*/
+			} else {
+				if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Expand")) {
+					// Set new Owner
+					p.owner = pid;
+
+					// Change selector color
+				}
 			}
+
 			
-			
+
+
+
 		}
 	}
 
@@ -119,7 +136,6 @@ public class MainGUI : MonoBehaviour {
 				server.AddBuilding(i, p.id, buttonClicked, pid);
 				showConMenu = false;
 			}
-		
 		}
 
 		if (GUI.Button(new Rect(150, 200, 60, 20), "Close")) {
