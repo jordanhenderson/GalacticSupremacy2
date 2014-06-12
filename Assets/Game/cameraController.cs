@@ -20,8 +20,8 @@ public class cameraController : MonoBehaviour {
 		int offset = 10;
 		if (pid == 0) offset *= -1;
 		transform.localPosition = new Vector3(p.x + offset, 20, p.z + offset);
-
-		transform.LookAt (new Vector3(p.x, 0, p.z));
+		transform.eulerAngles = new Vector3(90, 45, 0);
+		//transform.LookAt (new Vector3(p.x, 0, p.z));
 	}
 	
 	// Update is called once per frame
