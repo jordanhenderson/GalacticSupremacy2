@@ -80,7 +80,7 @@ public class Server : MonoBehaviour {
 	}
 
 	public Planet GetMainPlanet(int pid) {
-		if (pid == 0) return GetPlanetByID(0);
+		if (pid == 0) return GetPlanetByID(8);
 		if (pid == 1) return GetPlanetByID(9);
 
 		return null;
@@ -133,7 +133,7 @@ public class Server : MonoBehaviour {
 			p.texture = 1;
 			p.owner = 0;
 
-			if (i == 0) {
+			if (i == 8) {
 				p.owner = 1;
 			} else if (i == 9) {
 				p.owner = 2;
@@ -294,18 +294,6 @@ public class Server : MonoBehaviour {
 				}	
 			}
 		}
-
 		return newPos;
-
 	}
-
-	/*
-		Find Planet Coordinates:
-
-		1.  Generate coordinates for first planet, center of map.
-		2.	Generate random heading. Make new planet, push it towards the heading
-			until it is collision free.
-		3.	Repeat.
-	 */
-
 }
