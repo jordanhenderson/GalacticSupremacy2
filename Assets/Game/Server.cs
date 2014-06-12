@@ -160,7 +160,7 @@ public class Server : MonoBehaviour {
 		b = new Building(1, "Headquarters", 200, 0, 5, "");
 		buildings.Add(b);
 
-		b = new Building(2, "Mine", 200, 100, 2, "");
+		b = new Building(2, "Mine", 200, 10, 2, "");
 		buildings.Add(b);
 
 		b = new Building(3, "Shipwright", 200, 0, 2, "");
@@ -172,11 +172,13 @@ public class Server : MonoBehaviour {
 	public int GetIncome(int pid) {
 		//Provide data for the current player only (+security checks).
 		int income = 0;
+		//print("palyer: " + pid);
 		for(int j = 0; j < planets.Count; j++) {
 			Planet p = planets[j].GetPlanet ();
 			//For each planet, add planet income and building income.
-			if(p.owner == players[pid].id) {
+			if(p.owner == players[pid].id+1) {
 				//Player owns the planet, add income.
+				//print("planet is owned:" + p.income);
 				income += p.income;
 				for(int k = 0; k < p.buildings.Count; k++) {
 					income += GetBuilding(p.buildings[k]).income;
