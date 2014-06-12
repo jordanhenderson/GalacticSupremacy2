@@ -29,9 +29,11 @@ public class startup : MonoBehaviour {
 		MainGUI gui = mainGUI.AddComponent<MainGUI> ();
 		gui.server = server;
 		gui.s = this;
+		gui.name = "MainGUI";
 
 		//Create planet selector.
 		selector = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+		selector.name = "selector";
 		// selector is invisible until a selection is made
 		selector.renderer.enabled = false;
 
@@ -57,6 +59,29 @@ public class startup : MonoBehaviour {
 		lr.material = new Material(Shader.Find("Particles/Additive"));
 		lr.SetColors(color1, color2);
 		line.name = "Line "+p1.id+ "-"+p2.id;
+	}
+
+	public void RedrawLines(GameObject go) {
+		// go is the Planet object which changed ownership
+		Planet p = go.GetComponent<planetScript>().GetPlanet();
+
+
+		foreach (int id in p.adjacent) {
+			// determine if adjacent pid is greater than this pid
+			int p1 = Mathf.Min(id, p.id);
+			int p2 = Mathf.Max(id, p.id);
+			
+			
+			// find corresponding LineRenderer
+			GameObject line = GameObject.Find("Line "+p1+"-"+p2);
+			LineRenderer lr = line.GetComponent<LineRenderer>();
+
+			// recolor it.
+			Color color1 = FindColor(server.GetPlanetByID(p1));
+			Color color2 = FindColor(server.GetPlanetByID(p2));
+			lr.SetColors(color1, color2);
+		}
+
 	}
 
 	private Color FindColor(Planet p) {

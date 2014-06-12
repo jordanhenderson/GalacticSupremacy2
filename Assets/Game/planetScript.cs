@@ -38,6 +38,7 @@ public class planetScript : MonoBehaviour {
 
 	void Start() {
 		ownIndic = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+		ownIndic.name = "Indic " + planetData.id;
 		SetOwner();
 	}
 	
@@ -54,8 +55,7 @@ public class planetScript : MonoBehaviour {
 		ScaleChanging();
 	}
 
-	void SetOwner() {
-		
+	public void SetOwner() {
 		ownIndic.transform.localPosition = this.transform.localPosition;
 		//ownIndic.transform.localPosition.y -=1;
 		ownIndic.transform.localScale = new Vector3(1.8f, 0, 1.8f);
@@ -70,7 +70,6 @@ public class planetScript : MonoBehaviour {
 		} else if (planetData.owner == 2) {
 			ownIndic.renderer.material.color = Color.red;
 		}
-
 		//ownIndic.renderer.material.color.a = 0.2f;
 	}
 

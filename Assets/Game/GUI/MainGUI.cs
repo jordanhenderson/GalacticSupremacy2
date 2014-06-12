@@ -113,15 +113,14 @@ public class MainGUI : MonoBehaviour {
 				if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Expand")) {
 					// Set new Owner
 					p.owner = pid;
-
+					// Find related object
+					GameObject go = GameObject.Find("Planet "+p.id);
 					// Change selector color
+					go.GetComponent<planetScript>().SetOwner();
+					s.RedrawLines(go);
+					
 				}
 			}
-
-			
-
-
-
 		}
 	}
 
