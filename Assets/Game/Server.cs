@@ -117,10 +117,18 @@ public class Server : MonoBehaviour {
 		createBuildings();
 		//Create the initial planets. TODO: Read this from server.
 		for(int i = 0; i < 10; i++) {
+			Vector3 start = new Vector3(16, 0, 16);
 			Planet p = new Planet(i);
 			p.sector = 0;
-			p.x = 16 + (i * 10);
-			p.z = 16 + (i * 10);
+			if (i == 0) {
+				p.x = start.x;
+				p.z = start.z;	
+			} else {
+				Vector3 newPos = FindNewPos(start);
+				p.x = newPos.x;
+				p.z = newPos.z;
+			}
+			
 			p.scale = 1;
 			p.texture = 1;
 			p.owner = 0;
@@ -257,5 +265,47 @@ public class Server : MonoBehaviour {
 		Planet p = planets[id].GetPlanet();
 		return p;
 	}
+
+
+	private Vector3 FindNewPos(Vector3 start) {
+		Vector3 newPos = start;
+		bool hasCollision = true;
+		int count = planets.Count;
+
+		// Generate random heading:
+		float randX = Random.Range(-1f, 1f);
+		float randZ = Random.Range(-1f, 1f);
+		Vector3 heading = new Vector3 (randX, 0, randZ);
+
+		while (hasCollision == true) {
+			newPos += heading;
+			hasCollision = false;
+
+			for (int i = 0; i < count; i++) {
+				float otherX = planets[i].GetPlanet().x;
+				float otherZ = planets[i].GetPlanet().z;
+
+				Vector3 otherPos = new Vector3 (otherX, 0, otherZ);
+
+				float distance = Vector3.Distance(newPos, otherPos);
+
+				if (distance < 10f) {
+					hasCollision = true;
+				}	
+			}
+		}
+
+		return newPos;
+
+	}
+
+	/*
+		Find Planet Coordinates:
+
+		1.  Generate coordinates for first planet, center of map.
+		2.	Generate random heading. Make new planet, push it towards the heading
+			until it is collision free.
+		3.	Repeat.
+	 */
 
 }
