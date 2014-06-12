@@ -45,6 +45,9 @@ public class startup : MonoBehaviour {
 		Planet p1 = go1.GetComponent<planetScript>().GetPlanet();
 		Planet p2 = go2.GetComponent<planetScript>().GetPlanet();
 
+		Color color1 = FindColor(p1);
+		Color color2 = FindColor(p2);
+
 		GameObject line = new GameObject();
 		LineRenderer lr = line.AddComponent<LineRenderer>();
 
@@ -52,8 +55,20 @@ public class startup : MonoBehaviour {
 		lr.SetPosition(1, go2.transform.position); 
 		lr.SetWidth(0.5f,0.5f);
 		lr.material = new Material(Shader.Find("Particles/Additive"));
-		lr.SetColors(Color.gray, Color.gray);
+		lr.SetColors(color1, color2);
 		line.name = "Line "+p1.id+ "-"+p2.id;
+	}
+
+	private Color FindColor(Planet p) {
+		if (p.owner == 0) {
+			return Color.gray;
+		} else if (p.owner == 1) {
+			return Color.blue;
+		} else if (p.owner == 2) {
+			return Color.red;
+		} else {
+			return Color.white;
+		}
 	}
 
 	public Planet GetPlanet() {
@@ -63,6 +78,8 @@ public class startup : MonoBehaviour {
 			}
 		else return null;
 	}
+
+
 
 	public void SelectPlanet(planetScript ps) {
 		// If a previous selection exists, deselect. 
