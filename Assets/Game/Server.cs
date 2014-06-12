@@ -175,6 +175,7 @@ public class Server : MonoBehaviour {
 					planets[i].AddAdjacent(planets[j].GetPlanet());
 					planets[j].AddAdjacent(planets[i].GetPlanet());
 
+					s.DrawLine(p1,p2);
 					// create some line/indicator object
 				}
 				

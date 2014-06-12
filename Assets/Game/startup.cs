@@ -41,6 +41,14 @@ public class startup : MonoBehaviour {
 
 	}
 	
+	public void DrawLine(GameObject go1, GameObject go2) {
+		GameObject line = new GameObject();
+		LineRenderer lr = line.AddComponent<LineRenderer>();
+
+		lr.SetPosition(0, go1.transform.position);
+		lr.SetPosition(1, go2.transform.position); 
+	}
+
 	public Planet GetPlanet() {
 		//Get the underlying planet data of the currently selected planet.
 		if (selectedPlanet != null) { 
