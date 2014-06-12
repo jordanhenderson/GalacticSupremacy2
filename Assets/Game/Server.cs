@@ -289,7 +289,7 @@ public class Server : MonoBehaviour {
 
 				float distance = Vector3.Distance(newPos, otherPos);
 
-				if (distance < 10f) {
+				if (distance < 12f) {
 					hasCollision = true;
 				}	
 			}
