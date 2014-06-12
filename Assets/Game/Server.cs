@@ -82,7 +82,7 @@ public class Server : MonoBehaviour {
 	public Planet GetMainPlanet(int pid) {
 		for (int i = 0; i < planets.Count; i++) {
 			Planet p = planets[i].GetPlanet ();
-			if(p.owner == pid) {
+			if(p.owner == pid+1) {
 				return p;
 			}
 		}

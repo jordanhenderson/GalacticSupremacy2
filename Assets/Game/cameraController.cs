@@ -16,12 +16,12 @@ public class cameraController : MonoBehaviour {
 	public void NextTurn() {
 		int pid = server.GetCurrentPlayer ().id;
 		Planet p = server.GetMainPlanet (pid); 
+		print("CAMERA: pid: " + pid);
 		// set starting view to players start planet
-		int offset = 10;
-		if (pid == 0) offset *= -1;
-		transform.localPosition = new Vector3(p.x + offset, 20, p.z + offset);
+		int offset = 0;
+		//if (pid == 0) offset *= -1;
+		transform.localPosition = new Vector3(p.x + offset, 40, p.z + offset);
 		transform.eulerAngles = new Vector3(90, 45, 0);
-		//transform.LookAt (new Vector3(p.x, 0, p.z));
 	}
 	
 	// Update is called once per frame
