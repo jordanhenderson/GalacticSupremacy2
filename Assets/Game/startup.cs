@@ -42,11 +42,18 @@ public class startup : MonoBehaviour {
 	}
 	
 	public void DrawLine(GameObject go1, GameObject go2) {
+		Planet p1 = go1.GetComponent<planetScript>().GetPlanet();
+		Planet p2 = go2.GetComponent<planetScript>().GetPlanet();
+
 		GameObject line = new GameObject();
 		LineRenderer lr = line.AddComponent<LineRenderer>();
 
 		lr.SetPosition(0, go1.transform.position);
 		lr.SetPosition(1, go2.transform.position); 
+		lr.SetWidth(0.5f,0.5f);
+		lr.material = new Material(Shader.Find("Particles/Additive"));
+		lr.SetColors(Color.gray, Color.gray);
+		line.name = "Line "+p1.id+ "-"+p2.id;
 	}
 
 	public Planet GetPlanet() {
