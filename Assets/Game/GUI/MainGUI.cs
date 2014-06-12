@@ -8,7 +8,8 @@ public class MainGUI : MonoBehaviour {
 	public bool showConMenu = false;
 	private int buttonClicked;
 	public bool windowOpen = true;
-	
+	private int pid;
+
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
 	Rect constructionPanel = new Rect(Screen.width/3, Screen.height/5, 250, 250);
@@ -30,7 +31,7 @@ public class MainGUI : MonoBehaviour {
 
 	void OnGUI () {
 		Planet p = s.GetPlanet();
-		int pid = server.GetCurrentPlayer ().id + 1;
+		pid = server.GetCurrentPlayer ().id + 1;
 
 		resourcePanel = GUI.Window (0, resourcePanel, DrawResourcePanel, "Player " + pid + ": Resources");
 
@@ -90,22 +91,17 @@ public class MainGUI : MonoBehaviour {
 
 				if (server.GetBuilding(p.buildings[i]).id == 0) {
 					//print ("is empty");
-				}
-				//print ("id " + server.GetBuilding(p.buildings[i]).id);
-				/*
-				if (p.buildings[i].cost == 0) {
 					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
 						showConMenu = true;
 						buttonClicked = i;
 					}
 				} else {
-					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), p.buildings[i].name)) {
+					if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), server.GetBuilding(p.buildings[i]).name)) {
 						showConMenu = true;
 						buttonClicked = i;
-
 					}
 				}
-				*/
+				
 			}
 			
 			
@@ -113,14 +109,18 @@ public class MainGUI : MonoBehaviour {
 	}
 
 	void DrawConPanel(int id) {
+		// retrieve number of possible buildings from server:
+		int numBuildings = server.getNumBuildings();
+		Planet p = s.GetPlanet();
 
-		//for (int i = 0; i < Buildings.nBuildings; ++i) {
-		/*
-			if (GUI.Button(new Rect(20, 20+(i*25), 100, 20), "Build" +Buildings.buildings[i].name)) {
-
+		// draw a button for each construction option
+		for (int i = 1; i < numBuildings ; ++i) {
+			if (GUI.Button(new Rect(20, 20+(i*25), 100, 20), server.GetBuilding(i).name)) {
+				server.AddBuilding(i, p.id, buttonClicked, pid);
+				showConMenu = false;
 			}
-		*/
-		//}
+		
+		}
 
 		if (GUI.Button(new Rect(150, 200, 60, 20), "Close")) {
 				showConMenu = false;

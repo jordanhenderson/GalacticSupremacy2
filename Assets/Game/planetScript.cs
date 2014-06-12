@@ -1,10 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using gsFramework;
-/*
- * Discuss:
- *	- does the region have to know it is selected/deselected? handled in client.
- */
 
 public class planetScript : MonoBehaviour {
 	public Shader shDefault = Shader.Find("Diffuse");

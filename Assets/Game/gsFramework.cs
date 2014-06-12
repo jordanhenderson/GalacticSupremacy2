@@ -1,4 +1,4 @@
-/* Galactic Supremacy Framework. Here are shared struct defs and functions.
+/* Galactic Supremacy Framework. Here are shared classes, functions.
  */
 using System.Collections.Generic;
 namespace gsFramework

@@ -47,6 +47,11 @@ public class Server : MonoBehaviour {
 	private int pid = 0;
 	private int turn = 0;
 	
+
+	public int getNumBuildings() {
+		return buildings.Count;
+	}
+
 	public Building GetBuilding(int id) {
 		return buildings[id];
 	}
@@ -56,6 +61,17 @@ public class Server : MonoBehaviour {
 		return players [id];
 	}
 
+	// add a building to a planet
+	public void AddBuilding(int buildingID, int planetID, int slot, int playerID) {
+		// DEBUG: check if correct inputs are given
+		//print("build " + buildingID + " on planet " + planetID);
+		//print("on slot " + slot + " by player " + playerID);
+
+
+
+		Planet p = planets[planetID].GetPlanet();
+		p.buildings[slot] = buildings[buildingID].id;
+	}
 
 	//Get the current (prototype only - turn based) player
 	public PlayerState GetCurrentPlayer() {
@@ -126,20 +142,6 @@ public class Server : MonoBehaviour {
 			}
 			planets.Add (s.AttachPlanet(p));
 		}
-		/* 
-		 * This loop creates mockup data for the buildings.
-		 * No longer needed as of implementation of proper buildings.
-		for(int i = 0; i < 4; i++) {
-			Building b = new Building(i);
-			b.name = "Building " + i;
-			b.cost = 100 + (i*100);
-			b.income = 10 + (i* 10);
-			b.constructionTime = 30.0f + (10 * i);
-			b.imageURL = "building" + i + ".jpg";
-			buildings.Add(b);
-		}
-		*/
-
 
 		//Add Two players
 		players.Add (new PlayerState (0));
