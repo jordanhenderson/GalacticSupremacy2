@@ -98,7 +98,7 @@ public class planetScript : MonoBehaviour {
 		ownIndic.renderer.material.shader = shDefault;
 	}
 
-	void Select() {
+	public void Select() {
 		// Tell client this region was selected:
 		startup.GetComponent<startup>().SelectPlanet(this);
 		ownIndic.transform.localScale = new Vector3(2.2f, 0, 2.2f);

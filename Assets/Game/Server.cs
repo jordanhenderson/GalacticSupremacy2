@@ -80,12 +80,9 @@ public class Server : MonoBehaviour {
 	}
 
 	public Planet GetMainPlanet(int pid) {
-		for (int i = 0; i < planets.Count; i++) {
-			Planet p = planets[i].GetPlanet ();
-			if(p.owner == pid+1) {
-				return p;
-			}
-		}
+		if (pid == 0) return GetPlanetByID(0);
+		if (pid == 1) return GetPlanetByID(9);
+
 		return null;
 	}
 
@@ -98,6 +95,8 @@ public class Server : MonoBehaviour {
 			ProcessUpdate (empty);
 		}
 		pid = (pid + 1) % 2;
+		GameObject go = GameObject.Find("Planet "+GetMainPlanet(pid).id);
+		go.GetComponent<planetScript>().Select();
 	}
 
 	public int GetTurn() {
