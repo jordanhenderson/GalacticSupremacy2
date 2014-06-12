@@ -234,6 +234,8 @@ public class Server : MonoBehaviour {
 		}
 	}
 
+
+
 	private IEnumerator StartUpdate() {
 		if (state == 0 || state == 2) {
 			state = 1;
@@ -251,4 +253,10 @@ public class Server : MonoBehaviour {
 	void Update() {
 		StartCoroutine (StartUpdate ());
 	}
+
+	public Planet GetPlanetByID(int id) {
+		Planet p = planets[id].GetPlanet();
+		return p;
+	}
+
 }

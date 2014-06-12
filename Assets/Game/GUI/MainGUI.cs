@@ -109,7 +109,7 @@ public class MainGUI : MonoBehaviour {
 				 *	- is not owned by any player
 				 *	- is adjacent to an owned planet
 				*/
-			} else {
+			} else if (isAdjacent(p)){
 				if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Expand")) {
 					// Set new Owner
 					p.owner = pid;
@@ -123,6 +123,17 @@ public class MainGUI : MonoBehaviour {
 
 
 		}
+	}
+
+	bool isAdjacent(Planet p) {
+		for (int i = 0; i < p.adjacent.Count; i++) {
+			int id = p.adjacent[i];
+			Planet p2 = server.GetPlanetByID(id);
+			//print("pid: " + pid);
+			//print("p.owner: " + p.owner);
+			if (p2.owner == pid) return true;
+		}
+		return false;
 	}
 
 	void DrawConPanel(int id) {
