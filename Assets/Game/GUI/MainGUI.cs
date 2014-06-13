@@ -8,6 +8,7 @@ public class MainGUI : MonoBehaviour {
 	public bool showConMenu = false;
 	private int buttonClicked;
 	public bool windowOpen = true;
+	private bool showScore = false;
 	private int pid;
 
 	private int costEx = 10;
@@ -17,8 +18,9 @@ public class MainGUI : MonoBehaviour {
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
 	Rect constructionPanel = new Rect(Screen.width/3, Screen.height/5, 250, 250);
+	Rect scorePanel = new Rect(Screen.width/3, Screen.height/5, 250, 250);
 	Rect endTurn = new Rect(Screen.width-100, 0, 100, 50);
-	Rect closeButton = new Rect(Screen.width-50, 25,50, 30);
+	Rect closeButton = new Rect(Screen.width-100, 25,100, 30);
 	Planet old_planet;
 
 	void Awake() {
@@ -54,6 +56,18 @@ public class MainGUI : MonoBehaviour {
 			server.NextTurn();
 			s.mainCamera.GetComponent<cameraController>().NextTurn();
 		}
+
+		if (showScore) {
+			scorePanel = GUI.Window(3, scorePanel, DrawScorePanel, "Score Panel");
+		}
+	}
+
+	void DrawScorePanel(int id) {
+		int score1 = server.GetPlayer(0).score;
+		int score2 = server.GetPlayer(1).score;
+
+		GUI.Label(new Rect(20, 20, 120, 20 ), "Player 1: "+ score1);
+		GUI.Label(new Rect(120, 20, 120, 20 ), "Player 2: "+ score2);
 	}
 
 	void DrawResourcePanel(int id) {
@@ -79,6 +93,8 @@ public class MainGUI : MonoBehaviour {
 
 		PlayerState player = server.GetCurrentPlayer();
 		Planet p = s.GetPlanet();
+		old_planet = p;
+
 		if(p != null) {
 			if (isExplored(p)) {
 			// SolReg Stats get displayed in the far left:
@@ -88,11 +104,13 @@ public class MainGUI : MonoBehaviour {
 			GUI.Label(new Rect(20, 125, 130, 20),"Construction Slots: "+ p.slots);
 			}
 			
-			/*
-			if (GUI.Button (closeButton, "Close")) {
+			
+			if (GUI.Button (closeButton, "End Game")) {
 				windowOpen = false;    
+
+				showScore = true;
 			}
-			*/
+			
 
 			// Case 1: Planet is owned by player, display construction options
 			if (p.owner == pid) {	

@@ -299,6 +299,8 @@ public class Server : MonoBehaviour {
 	}
 
 
+
+
 	private Vector3 FindNewPos(Vector3 start) {
 		Vector3 newPos = start;
 		bool hasCollision = true;
