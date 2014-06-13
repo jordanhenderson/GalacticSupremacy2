@@ -36,8 +36,9 @@ public class MainGUI : MonoBehaviour {
 	void OnGUI () {
 		Planet p = s.GetPlanet();
 		pid = server.GetCurrentPlayer ().id + 1;
+		int score = server.GetCurrentPlayer().score;
 
-		resourcePanel = GUI.Window (0, resourcePanel, DrawResourcePanel, "Player " + pid + ": Resources");
+		resourcePanel = GUI.Window (0, resourcePanel, DrawResourcePanel, "Player " + pid + " ("+ score +")");
 
 		if (!windowOpen && p != old_planet) {
 			windowOpen = true;
@@ -123,6 +124,9 @@ public class MainGUI : MonoBehaviour {
 							player.credits -= attackCost;
 							// Set new Owner
 							p.owner = pid;
+
+							player.explored.Add(p.id);	// Add planet to the explored list.
+
 							// Find related object
 							GameObject go = GameObject.Find("Planet "+p.id);
 							// Change selector color

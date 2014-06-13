@@ -52,6 +52,8 @@ namespace gsFramework
 	public class PlayerState : ServerObject {
 		public int credits;
 		public int income;
+		public int expenditure;
+		public int HQ;
 		public int score;
 		public List<int> explored;
 		public PlayerState (int id): base(id, ObjectType.OBJECT_PLAYERSTATE)

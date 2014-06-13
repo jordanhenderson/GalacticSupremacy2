@@ -137,12 +137,10 @@ public class Server : MonoBehaviour {
 
 			if (i == 8) {
 				p.income = 100;
-				//p.scale = 3;
 				p.owner = 1;
 				p.slots = 5;
 			} else if (i == 9) {
 				p.income = 100;
-				//p.scale = 3;
 				p.owner = 2;
 				p.slots = 5;
 			}
@@ -163,8 +161,12 @@ public class Server : MonoBehaviour {
 		//Add Two players
 		players.Add (new PlayerState (0));
 		players[0].explored.Add(8);
+		players[0].expenditure = 0;
+		players[0].HQ = 0;
 		players.Add (new PlayerState (1));
 		players[1].explored.Add(9);
+		players[1].expenditure = 0;
+		players[1].HQ = 0;
 		//Start the game state. (prototype only)
 		byte[] empty = new byte[0];
 		ProcessUpdate (empty);
@@ -205,7 +207,7 @@ public class Server : MonoBehaviour {
 		Building b = new Building(0, "Empty", 0, 0, 0, "");
 		buildings.Add(b);
 
-		b = new Building(1, "Headquarters", 250, 0, 5, "");
+		b = new Building(1, "Headquarters", 150, 0, 5, "");
 		buildings.Add(b);
 
 		b = new Building(2, "Mine", 50, 10, 2, "");
@@ -235,6 +237,25 @@ public class Server : MonoBehaviour {
 		}
 		return income;
 	}
+
+	public int GetScore(int pid) {
+		int score = 0;
+		//print("palyer: " + pid);
+		for(int j = 0; j < planets.Count; j++) {
+			Planet p = planets[j].GetPlanet ();
+			if(p.owner == players[pid].id+1) {
+				//Player owns the planet, add income.
+				//print("planet is owned:" + p.income);
+				score += 1;
+				for(int k = 0; k < p.buildings.Count; k++) {
+					if (p.buildings[k] == 1) score += 2;
+				}
+			}
+		}
+		return score;
+	}
+
+
 	/*
 	 * The logic in this function should be moved server-side.
 	 * This function should be called on a timer (part of the game state).
@@ -247,6 +268,8 @@ public class Server : MonoBehaviour {
 			int income = GetIncome (i);
 			players[i].credits = players[i].credits + income;
 			players[i].income = income;
+
+			players[i].score += GetScore(i);
 		}
 	}
 
