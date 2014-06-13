@@ -201,17 +201,17 @@ public class Server : MonoBehaviour {
 
 	// Populate building list
 	private void createBuildings() {
-		// constructor: id, name, cost, income, time, url
+		// building-constructor: id, name, cost, income, time, url
 		Building b = new Building(0, "Empty", 0, 0, 0, "");
 		buildings.Add(b);
 
-		b = new Building(1, "Headquarters", 200, 0, 5, "");
+		b = new Building(1, "Headquarters", 250, 0, 5, "");
 		buildings.Add(b);
 
-		b = new Building(2, "Mine", 200, 10, 2, "");
+		b = new Building(2, "Mine", 50, 10, 2, "");
 		buildings.Add(b);
 
-		b = new Building(3, "Shipwright", 200, 0, 2, "");
+		b = new Building(3, "Turret", 200, 0, 2, "");
 		buildings.Add(b);
 	}
 

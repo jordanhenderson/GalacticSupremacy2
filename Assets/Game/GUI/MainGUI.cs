@@ -58,9 +58,10 @@ public class MainGUI : MonoBehaviour {
 	void DrawResourcePanel(int id) {
 		PlayerState p = server.GetCurrentPlayer ();
 		int credits = p.credits;
-		int income = p.income;
+		int income = server.GetIncome(p.id);
+
 		GUI.Label(new Rect(20, 20, 120, 20 ), "Credits: $"+ credits);
-		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income +"/turn");
+		GUI.Label(new Rect(120, 20, 120, 20 ),"Income: $"+ income);
 		GUI.Label(new Rect(240, 20, 120, 20 ),"Turn " + server.GetTurn ());
 
 	}
@@ -71,39 +72,38 @@ public class MainGUI : MonoBehaviour {
 	 */
 	void DrawRegionPanel(int id) {
 		//Grid layout variables
-		int boxXY = 70;
+		int boxXY = 100;
 		int xStart = 200;
-		int yStart = 120;
+		int yStart = 80;
 
 		PlayerState player = server.GetCurrentPlayer();
 		Planet p = s.GetPlanet();
 		if(p != null) {
 			if (isExplored(p)) {
 			// SolReg Stats get displayed in the far left:
-			GUI.Label(new Rect(20, 20, 130, 20), "Region "+ p.id +" debug data");
-			GUI.Label(new Rect(20, 55, 130, 20), "Owned by Player "+ p.owner);
+			GUI.Label(new Rect(20, 20, 130, 20), "Region "+ p.id +" report:");
+			//GUI.Label(new Rect(20, 55, 130, 20), "Owned by Player "+ p.owner);
 			GUI.Label(new Rect(20, 90, 130, 20), "Income: "+ p.income);
 			GUI.Label(new Rect(20, 125, 130, 20),"Construction Slots: "+ p.slots);
-			//GUI.Label(new Rect(20, 160, 130, 20),"Empty Slots: "+ p.emptySlots);
 			}
+			
 			/*
 			if (GUI.Button (closeButton, "Close")) {
 				windowOpen = false;    
 			}
 			*/
-			//old_planet = p;
 
 			// Case 1: Planet is owned by player, display construction options
 			if (p.owner == pid) {	
 				for (int i = 0; i < p.slots; ++i) {
 					if (server.GetBuilding(p.buildings[i]).id == 0) {
 						//print ("is empty");
-						if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), "Empty\nSlot")) {
+						if (GUI.Button(new Rect(xStart+(i*100), yStart, boxXY, boxXY), "Empty\nSlot")) {
 							showConMenu = true;
 							buttonClicked = i;
 						}
 					} else {
-						if (GUI.Button(new Rect(xStart+(i*70), yStart, boxXY, boxXY), server.GetBuilding(p.buildings[i]).name)) {
+						if (GUI.Button(new Rect(xStart+(i*100), yStart, boxXY, boxXY), server.GetBuilding(p.buildings[i]).name)) {
 							showConMenu = true;
 							buttonClicked = i;
 						}
@@ -114,40 +114,66 @@ public class MainGUI : MonoBehaviour {
 			} else if (isAdjacent(p)){ 
 				// Case 2.1: Planet is owned by another player.
 				if (p.owner != 0) {
-					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY*2, boxXY), "Conquer")) {
-						// Set new Owner
-						p.owner = pid;
-						// Find related object
-						GameObject go = GameObject.Find("Planet "+p.id);
-						// Change selector color
-						go.GetComponent<planetScript>().SetOwner();
-						s.RedrawLines(go);	
+					int turrets = countTurrets(p);
+					int attackCost = costConq + turrets * 500;
+					if (GUI.Button(new Rect(xStart+(100), yStart, boxXY*2, boxXY), "Conquer ($"+attackCost+")")) {
+						// count turrets, add count*500 to costConq
+						
+						if (player.credits >= (attackCost)) {
+							player.credits -= attackCost;
+							// Set new Owner
+							p.owner = pid;
+							// Find related object
+							GameObject go = GameObject.Find("Planet "+p.id);
+							// Change selector color
+							go.GetComponent<planetScript>().SetOwner();
+							s.RedrawLines(go);
+						}	
 					}
 				// Case 2.2: Planet is unoccupied, explored
 				} else if (isExplored(p)) {
-					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY*2, boxXY), "Colonise")) {
-						// Set new Owner
-						p.owner = pid;
-						// Find related object
-						GameObject go = GameObject.Find("Planet "+p.id);
-						// Change selector color
-						go.GetComponent<planetScript>().SetOwner();
-						s.RedrawLines(go);	
+					if (GUI.Button(new Rect(xStart+(100), yStart, boxXY*2, boxXY), "Colonise ($"+costCol+")")) {
+						if (player.credits >= costCol) {
+							player.credits -= costCol;
+
+							// Set new Owner
+							p.owner = pid;
+							// Find related object
+							GameObject go = GameObject.Find("Planet "+p.id);
+							// Change selector color
+							go.GetComponent<planetScript>().SetOwner();
+							s.RedrawLines(go);	
+
+							// Compute new income
+
+						} else {
+							// Not enough resources, do something
+						}
 					}
 				// Case 2.3: Planet is unoccupied, unexplored
 				} else {
-					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY*2, boxXY), "Explore ($"+costEx+")")) {
+					if (GUI.Button(new Rect(xStart+(100), yStart, boxXY*2, boxXY), "Explore ($"+costEx+")")) {
 						// Check if resources available
-						// Deduct Cost
-						// Reveal data
-
-						// Find related object
-						GameObject go = GameObject.Find("Planet "+p.id);
-						player.explored.Add(p.id);
+						if (player.credits >= costEx) {
+							player.credits -= costEx; 	// Deduct Cost
+							
+							player.explored.Add(p.id);	// Add planet to the explored list.
+						} else {
+							// Not enough resources, do something
+						}
 					}
 				}
 			}
 		}
+	}
+
+	int countTurrets(Planet p) {
+		int count = 0;
+		for (int i = 0; i < p.buildings.Count; i++) {
+			if (p.buildings[i] == 3) count++;
+		}
+
+		return count;
 	}
 
 	bool isExplored(Planet p) {
@@ -173,12 +199,23 @@ public class MainGUI : MonoBehaviour {
 		// retrieve number of possible buildings from server:
 		int numBuildings = server.getNumBuildings();
 		Planet p = s.GetPlanet();
+		PlayerState player = server.GetCurrentPlayer();
 
 		// draw a button for each construction option
+		// start with 1, as 0 is the empty building
 		for (int i = 1; i < numBuildings ; ++i) {
-			if (GUI.Button(new Rect(20, 20+(i*25), 100, 20), server.GetBuilding(i).name)) {
-				server.AddBuilding(i, p.id, buttonClicked, pid);
-				showConMenu = false;
+			string name = server.GetBuilding(i).name;
+			int cost = server.GetBuilding(i).cost;
+			string myString = name + ": $" + cost;
+
+			if (GUI.Button(new Rect(20, 20+(i*25), 200, 20), myString)) {
+				if (player.credits >= cost) {
+					player.credits -= cost;
+					server.AddBuilding(i, p.id, buttonClicked, pid);
+					showConMenu = false;
+				} else {
+
+				}
 			}
 		}
 
