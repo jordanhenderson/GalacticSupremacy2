@@ -71,7 +71,7 @@ public class MainGUI : MonoBehaviour {
 		int xStart = 200;
 		int yStart = 120;
 
-
+		PlayerState player = server.GetCurrentPlayer();
 		Planet p = s.GetPlanet();
 		if(p != null) {
 
@@ -110,26 +110,49 @@ public class MainGUI : MonoBehaviour {
 				 *	- is adjacent to an owned planet
 				*/
 			} else if (isAdjacent(p)){
-				if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Expand")) {
-					// Set new Owner
-					p.owner = pid;
-					// Find related object
-					GameObject go = GameObject.Find("Planet "+p.id);
-					// Change selector color
-					go.GetComponent<planetScript>().SetOwner();
-					s.RedrawLines(go);
-					
+				
+
+				if (isExplored(p)) {
+					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Expand")) {
+						// Set new Owner
+						p.owner = pid;
+						// Find related object
+						GameObject go = GameObject.Find("Planet "+p.id);
+						// Change selector color
+						go.GetComponent<planetScript>().SetOwner();
+						s.RedrawLines(go);
+						
+					}
+				} else {
+					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Explore")) {
+						// Check if resources available
+						// Deduct Cost
+						// Reveal data
+
+						// Find related object
+						GameObject go = GameObject.Find("Planet "+p.id);
+						player.explored.Add(p.id);
+
+					}
 				}
 			}
 		}
+	}
+
+	bool isExplored(Planet p) {
+		PlayerState player = server.GetCurrentPlayer();
+		int count = player.explored.Count;
+		for (int i = 0; i < count; i++) {
+			if (player.explored[i] == p.id) return true;
+		}
+		return false;
+
 	}
 
 	bool isAdjacent(Planet p) {
 		for (int i = 0; i < p.adjacent.Count; i++) {
 			int id = p.adjacent[i];
 			Planet p2 = server.GetPlanetByID(id);
-			//print("pid: " + pid);
-			//print("p.owner: " + p.owner);
 			if (p2.owner == pid) return true;
 		}
 		return false;

@@ -129,18 +129,25 @@ public class Server : MonoBehaviour {
 				p.z = newPos.z;
 			}
 			
-			p.scale = 1;
+			//p.scale = 1;
 			p.texture = 1;
 			p.owner = 0;
+			p.income = Random.Range(10, 50);
+			p.slots = 3;
 
 			if (i == 8) {
+				p.income = 100;
+				//p.scale = 3;
 				p.owner = 1;
+				p.slots = 5;
 			} else if (i == 9) {
+				p.income = 100;
+				//p.scale = 3;
 				p.owner = 2;
+				p.slots = 5;
 			}
 
-			p.income = 100;
-			p.slots = 3;
+			
 			//p.emptySlots = 1;  // not needed for now
 			for (int j = 0; j < p.slots; j++) {
 				int t = 0;
