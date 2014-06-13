@@ -133,7 +133,7 @@ public class Server : MonoBehaviour {
 			p.texture = 1;
 			p.owner = 0;
 			p.income = Random.Range(10, 50);
-			p.slots = 3;
+			p.slots = Random.Range(2, 6);
 
 			if (i == 8) {
 				p.income = 100;
