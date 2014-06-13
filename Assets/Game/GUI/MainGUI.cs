@@ -10,6 +10,10 @@ public class MainGUI : MonoBehaviour {
 	public bool windowOpen = true;
 	private int pid;
 
+	private int costEx = 10;
+	private int costCol = 100;
+	private int costConq = 500;
+
 	Rect resourcePanel = new Rect(0, 0, 370, 50);
 	Rect regionInfoPanel = new Rect(0, Screen.height-200, Screen.width, 250);
 	Rect constructionPanel = new Rect(Screen.width/3, Screen.height/5, 250, 250);
@@ -74,18 +78,20 @@ public class MainGUI : MonoBehaviour {
 		PlayerState player = server.GetCurrentPlayer();
 		Planet p = s.GetPlanet();
 		if(p != null) {
-
+			if (isExplored(p)) {
 			// SolReg Stats get displayed in the far left:
 			GUI.Label(new Rect(20, 20, 130, 20), "Region "+ p.id +" debug data");
 			GUI.Label(new Rect(20, 55, 130, 20), "Owned by Player "+ p.owner);
 			GUI.Label(new Rect(20, 90, 130, 20), "Income: "+ p.income);
 			GUI.Label(new Rect(20, 125, 130, 20),"Construction Slots: "+ p.slots);
 			//GUI.Label(new Rect(20, 160, 130, 20),"Empty Slots: "+ p.emptySlots);
-
+			}
+			/*
 			if (GUI.Button (closeButton, "Close")) {
 				windowOpen = false;    
 			}
-			old_planet = p;
+			*/
+			//old_planet = p;
 
 			// Case 1: Planet is owned by player, display construction options
 			if (p.owner == pid) {	
@@ -103,28 +109,34 @@ public class MainGUI : MonoBehaviour {
 						}
 					}	
 				}
-			// Case 2: Planet is not owned by player, but is adjacent.
-			// Display expansion option:
-				/*	Conditions:
-				 *	- is not owned by any player
-				 *	- is adjacent to an owned planet
-				*/
-			} else if (isAdjacent(p)){
-				
 
-				if (isExplored(p)) {
-					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Expand")) {
+			// Case 2: Planet is not owned by player.
+			} else if (isAdjacent(p)){ 
+				// Case 2.1: Planet is owned by another player.
+				if (p.owner != 0) {
+					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY*2, boxXY), "Conquer")) {
 						// Set new Owner
 						p.owner = pid;
 						// Find related object
 						GameObject go = GameObject.Find("Planet "+p.id);
 						// Change selector color
 						go.GetComponent<planetScript>().SetOwner();
-						s.RedrawLines(go);
-						
+						s.RedrawLines(go);	
 					}
+				// Case 2.2: Planet is unoccupied, explored
+				} else if (isExplored(p)) {
+					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY*2, boxXY), "Colonise")) {
+						// Set new Owner
+						p.owner = pid;
+						// Find related object
+						GameObject go = GameObject.Find("Planet "+p.id);
+						// Change selector color
+						go.GetComponent<planetScript>().SetOwner();
+						s.RedrawLines(go);	
+					}
+				// Case 2.3: Planet is unoccupied, unexplored
 				} else {
-					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY, boxXY), "Explore")) {
+					if (GUI.Button(new Rect(xStart+(70), yStart, boxXY*2, boxXY), "Explore ($"+costEx+")")) {
 						// Check if resources available
 						// Deduct Cost
 						// Reveal data
@@ -132,7 +144,6 @@ public class MainGUI : MonoBehaviour {
 						// Find related object
 						GameObject go = GameObject.Find("Planet "+p.id);
 						player.explored.Add(p.id);
-
 					}
 				}
 			}

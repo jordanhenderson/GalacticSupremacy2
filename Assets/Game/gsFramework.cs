@@ -59,4 +59,12 @@ namespace gsFramework
 			explored = new List<int>();
 		}
 	}
+
+	public class Costs : ServerObject {
+		public int explore = 10;
+		public Costs (int id): base(id, ObjectType.OBJECT_COSTS)
+		{
+			explored = new List<int>();
+		}
+	}
 }

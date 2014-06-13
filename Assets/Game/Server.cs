@@ -162,7 +162,9 @@ public class Server : MonoBehaviour {
 
 		//Add Two players
 		players.Add (new PlayerState (0));
+		players[0].explored.Add(8);
 		players.Add (new PlayerState (1));
+		players[1].explored.Add(9);
 		//Start the game state. (prototype only)
 		byte[] empty = new byte[0];
 		ProcessUpdate (empty);
