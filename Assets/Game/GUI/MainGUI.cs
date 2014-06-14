@@ -134,7 +134,8 @@ public class MainGUI : MonoBehaviour {
 				// Case 2.1: Planet is owned by another player.
 				if (p.owner != 0) {
 					int turrets = countTurrets(p);
-					int attackCost = costConq + turrets * 500;
+					int hqNum = countHQ(p);
+					int attackCost = costConq + turrets * 500 + hqNum * 150;
 					if (GUI.Button(new Rect(xStart+(100), yStart, boxXY*2, boxXY), "Conquer ($"+attackCost+")")) {
 						// count turrets, add count*500 to costConq
 						
@@ -193,6 +194,15 @@ public class MainGUI : MonoBehaviour {
 		int count = 0;
 		for (int i = 0; i < p.buildings.Count; i++) {
 			if (p.buildings[i] == 3) count++;
+		}
+
+		return count;
+	}
+
+	int countHQ(Planet p) {
+		int count = 0;
+		for (int i = 0; i < p.buildings.Count; i++) {
+			if (p.buildings[i] == 1) count++;
 		}
 
 		return count;

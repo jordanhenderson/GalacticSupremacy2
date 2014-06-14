@@ -20,7 +20,7 @@ public class cameraController : MonoBehaviour {
 		// set starting view to players start planet
 		int offset = 0;
 		//if (pid == 0) offset *= -1;
-		transform.localPosition = new Vector3(p.x + offset, 25, p.z + offset);
+		transform.localPosition = new Vector3(p.x + offset, 30, p.z + offset);
 		transform.eulerAngles = new Vector3(90, 45, 0);
 	}
 	

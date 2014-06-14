@@ -46,6 +46,7 @@ public class Server : MonoBehaviour {
 	//Keep player id for prototype purposes (switch between players).
 	private int pid = 0;
 	private int turn = 0;
+	private int maxPlanets = 12;
 	
 
 	public int getNumBuildings() {
@@ -80,8 +81,8 @@ public class Server : MonoBehaviour {
 	}
 
 	public Planet GetMainPlanet(int pid) {
-		if (pid == 0) return GetPlanetByID(8);
-		if (pid == 1) return GetPlanetByID(9);
+		if (pid == 0) return GetPlanetByID(maxPlanets-2);
+		if (pid == 1) return GetPlanetByID(maxPlanets-1);
 
 		return null;
 	}
@@ -116,7 +117,7 @@ public class Server : MonoBehaviour {
 
 		createBuildings();
 		//Create the initial planets. TODO: Read this from server.
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < maxPlanets; i++) {
 			Vector3 start = new Vector3(16, 0, 16);
 			Planet p = new Planet(i);
 			p.sector = 0;
@@ -132,14 +133,14 @@ public class Server : MonoBehaviour {
 			//p.scale = 1;
 			p.texture = 1;
 			p.owner = 0;
-			p.income = Random.Range(10, 50);
+			p.income = Random.Range(0, 20);
 			p.slots = Random.Range(2, 6);
 
-			if (i == 8) {
+			if (i == maxPlanets-2) {
 				p.income = 100;
 				p.owner = 1;
 				p.slots = 5;
-			} else if (i == 9) {
+			} else if (i == maxPlanets-1) {
 				p.income = 100;
 				p.owner = 2;
 				p.slots = 5;
@@ -160,11 +161,11 @@ public class Server : MonoBehaviour {
 
 		//Add Two players
 		players.Add (new PlayerState (0));
-		players[0].explored.Add(8);
+		players[0].explored.Add(18);
 		players[0].expenditure = 0;
 		players[0].HQ = 0;
 		players.Add (new PlayerState (1));
-		players[1].explored.Add(9);
+		players[1].explored.Add(19);
 		players[1].expenditure = 0;
 		players[1].HQ = 0;
 		//Start the game state. (prototype only)
