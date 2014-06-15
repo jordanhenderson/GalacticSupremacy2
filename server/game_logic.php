@@ -1,28 +1,29 @@
 <?php
+require("sql.php");
 session_start();
-$msgs = $_SESSION['msgs'];
-$ctr = $_SESSION['msg'];
 
-function send_chat($request) {
-	global $msgs;
-	global $ctr;
-	$msg = array("msg"=>$request['msg'], "id" => ++$ctr);
-	array_push($msgs, $request['msg']);
-	$_SESSION['msgs'] = $msgs;
-	$_SESSION['msg'] = $ctr;
-}
-
-function get_chat($request) {
-	global $msgs;
-	global $ctr;
-	$tgt_msgs = array();
-	$last = $request['ctr'];
-	foreach($msgs as $msg) {
-		if($msg["id"] > $last)
-		array_push($tgt_msgs, $msg["msg"]);
+function login($request) {
+	global $db;
+	
+	$qry = "SELECT * FROM users WHERE user = ?";
+	if($stmt = $db->prepare($qry)) {
+		$stmt->bind_param("s", $request['user']);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		while($row = $result->fetch_assoc())
+		{
+			$salt = $row['salt'];
+			$hashedpw = hash('sha256', $request['pass'] . $salt);
+			if($row['pass'] === $hashedpw) {
+				return json_encode("5544332211SessionID");
+			} else {
+				return json_encode("LOGIN_FAILED");
+			}
+		}
+		return json_encode("LOGIN_FAILED");
 	}
-	return json_encode(array($last, $tgt_msgs));
 }
+
 
 //Global gamestate object
 $gamestate = array();
