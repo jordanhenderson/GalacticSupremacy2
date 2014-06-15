@@ -28,11 +28,14 @@ function register($username, $pass) {
 	global $db;
 	$qry = "INSERT INTO users (user, pass, salt) VALUES (?,?,?);";
 	if($stmt = $db->prepare($qry)) {
-		$salt = openssl_random_pseudo_bytes(6);
+		$salt = bin2hex(openssl_random_pseudo_bytes(3));
 		$hashedpw = hash('sha256', $pass . $salt);
 		$stmt->bind_param("sss", $username, $hashedpw, $salt);
 		$stmt->execute();
+		return json_encode("REGISTER_SUCCESS");
 	}
+	return json_encode("REGISTER_FAILED");	
+
 }
 
 //Global gamestate object
