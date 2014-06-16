@@ -15,11 +15,12 @@ public class startup : MonoBehaviour {
 	public GameObject mainGUI;
 
 	/* Initialization. Queries the server for the data needed to build and
-	 * render the map. This includes the number regions, and data
+	 * render the map. This includes the number regions.
 	 */
 	void Start () {
 		//Create server component first (handles main game logic)
 		server = gameObject.AddComponent<Server>();
+		
 		//Create camera
 		mainCamera = GameObject.Find ("MainCamera");
 		mainCamera.AddComponent<cameraController> ().server = server;
@@ -39,10 +40,6 @@ public class startup : MonoBehaviour {
 
 	}
 
-	void Update() {
-
-	}
-	
 	public void DrawLine(GameObject go1, GameObject go2) {
 		Planet p1 = go1.GetComponent<planetScript>().GetPlanet();
 		Planet p2 = go2.GetComponent<planetScript>().GetPlanet();
@@ -64,8 +61,7 @@ public class startup : MonoBehaviour {
 	public void RedrawLines(GameObject go) {
 		// go is the Planet object which changed ownership
 		Planet p = go.GetComponent<planetScript>().GetPlanet();
-
-
+		
 		foreach (int id in p.adjacent) {
 			// determine if adjacent pid is greater than this pid
 			int p1 = Mathf.Min(id, p.id);
@@ -84,6 +80,9 @@ public class startup : MonoBehaviour {
 
 	}
 
+	/*
+	 *	This method returns a color based on a planets ownership status. 
+	 */
 	private Color FindColor(Planet p) {
 		if (p.owner == 0) {
 			return Color.gray;

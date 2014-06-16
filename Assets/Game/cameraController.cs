@@ -3,8 +3,11 @@ using System.Collections;
 using gsFramework;
 
 public class cameraController : MonoBehaviour {
+	
+	private Vector3 dragOrigin;
 	int cameraVelocity = 1;
-	public float camspeed = 20;
+	public float camspeed = 20f;
+	public float dragSpeed = 2f;
 	public Server server;
 	private Vector3 initPos;
 
@@ -21,11 +24,36 @@ public class cameraController : MonoBehaviour {
 		int offset = 0;
 		//if (pid == 0) offset *= -1;
 		transform.localPosition = new Vector3(p.x + offset, 30, p.z + offset);
-		transform.eulerAngles = new Vector3(90, 45, 0);
+		transform.eulerAngles = new Vector3(90, 0, 0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		KeyBoardControls ();
+		ClickToDrag ();
+
+	}
+
+	
+	void ClickToDrag () {
+		if (Input.GetMouseButtonDown(0)) {
+			// record position of mouseclick
+			dragOrigin = Input.mousePosition;
+			return;
+		}
+		
+		// continue only if mouse button is being held down.
+		if (!Input.GetMouseButton(0)) return;
+		
+		// offset is the difference between drag origin and current mousePosition.
+		Vector3 offset = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+		Vector3 move = new Vector3(offset.x * 2f, 0, offset.y * 2f);
+
+		// move the camera to the new position
+		transform.Translate(move, Space.World);	
+	}
+
+	void KeyBoardControls () {
 		// Left
 		if((Input.GetKey(KeyCode.LeftArrow)))
 		{
