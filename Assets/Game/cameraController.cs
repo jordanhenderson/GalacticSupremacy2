@@ -34,7 +34,7 @@ public class cameraController : MonoBehaviour {
 
 	}
 
-	
+
 	void ClickToDrag () {
 		if (Input.GetMouseButtonDown(0)) {
 			// record position of mouseclick
@@ -45,9 +45,9 @@ public class cameraController : MonoBehaviour {
 		// continue only if mouse button is being held down.
 		if (!Input.GetMouseButton(0)) return;
 		
-		// offset is the difference between drag origin and current mousePosition.
-		Vector3 offset = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
-		Vector3 move = new Vector3(offset.x * 2f, 0, offset.y * 2f);
+		// distance is the difference between drag origin and current mousePosition.
+		Vector3 distance = Camera.main.ScreenToViewportPoint(Input.mousePosition - dragOrigin);
+		Vector3 move = new Vector3(distance.x * 2f, 0, distance.y * 2f);
 
 		// move the camera to the new position
 		transform.Translate(move, Space.World);	
